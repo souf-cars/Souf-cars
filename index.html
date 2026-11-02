@@ -75,6 +75,15 @@ input,select,textarea{width:100%;border:1px solid var(--line);background:var(--c
 .sc select,.sc .search{border-radius:99px;background:#0f1319}
 .sc label{margin-top:12px}
 #list{margin-top:20px}
+.hero{min-height:580px;padding:92px 24px 110px;background:linear-gradient(180deg,rgba(14,17,22,.5) 0%,rgba(14,17,22,.78) 55%,#0e1116 100%),url(hero.jpg) center 35%/cover}
+.hero .top{position:absolute;top:calc(22px + env(safe-area-inset-top,0px));inset-inline:24px;display:flex;justify-content:space-between;align-items:center}
+.hero .top span{font-size:24px;font-weight:800}.hero .top b{color:var(--gold)}
+.hero .top button{background:rgba(255,255,255,.14);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:99px;padding:6px 18px;font:inherit}
+.hero h2{font-size:48px;line-height:1.15;color:#c9cdf0;text-shadow:0 2px 24px rgba(0,0,0,.45)}
+.hero h2 em{color:#fff}
+.hero p{color:#e6e8f2;font-size:17px;max-width:28ch}
+.hero .btn{background:#c9cdf0;color:#1a1d26;border-radius:99px;padding:14px 28px;font-size:16px}
+.hero .btn.ghost{background:none;color:#fff;border:1px solid #c9cdf0}
 </style>
 </head>
 <body>
@@ -85,11 +94,10 @@ input,select,textarea{width:100%;border:1px solid var(--line);background:var(--c
 <main>
 <section id="home" class="screen on">
   <div class="hero">
-    <p class="logo" style="font-size:22px;margin:0 0 28px;color:var(--ink)">سوف <span style="color:var(--gold)">كارز</span></p>
-    <h2>سوق السيارات في <em>الوادي</em></h2>
+    <div class="top"><span>سوف <b>كارز</b></span><button id="h-acc">حسابي</button></div>
+    <h2>اعثر على سيارتك <em>في الوادي</em></h2>
     <p>تصفّح السيارات الجديدة والمستعملة، أو أضف إعلان سيارتك بخطوات واضحة.</p>
-    <button class="btn" id="h-browse">تصفّح السيارات</button><button class="btn ghost" id="h-add">أضف إعلاناً</button>
-    <svg class="dunes" viewBox="0 0 400 70" preserveAspectRatio="none"><path d="M0 40 Q90 6 170 34 T330 26 T400 38 V70 H0Z" fill="#161a21"/><path d="M0 54 Q110 24 210 50 T400 46 V70 H0Z" fill="#0e1116"/></svg>
+    <button class="btn" id="h-browse">تصفّح السيارات ←</button><button class="btn ghost" id="h-add">أضف إعلاناً ↗</button>
   </div>
   <div class="sc" id="sc">
     <small>ابدأ البحث</small><h3>ما السيارة التي تبحث عنها؟</h3>
@@ -300,7 +308,7 @@ $("csel").innerHTML='<option value="الكل">كل البلديات</option>'+co
 $("bsel").onchange=function(){brand=this.value;render()};
 $("csel").onchange=function(){cityF=this.value;render()};
 $("h-browse").onclick=function(){$("sc").scrollIntoView({behavior:"smooth"})};
-$("h-add").onclick=function(){go("add")};
+$("h-add").onclick=function(){go("add")};$("h-acc").onclick=function(){go("me")};
 refresh();loadCars();
 </script>
 </body>
