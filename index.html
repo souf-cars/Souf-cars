@@ -132,6 +132,7 @@ input,select,textarea{width:100%;border:1px solid var(--line);background:var(--c
   <div id="mycars" style="display:none">
     <h2>سياراتي</h2>
     <p class="lead">تابع حالة كل سيارة زدتها.</p>
+    <div id="adm" style="display:none"></div>
     <div id="mylist"></div>
     <button class="btn alt" id="out">خروج</button>
   </div>
@@ -227,7 +228,7 @@ chips();render()}
 async function loadMine(){var r=await sb.from("cars").select("name,status").eq("owner_id",user.id).order("created_at",{ascending:false});
 mine=(r.data||[]).map(function(x){return{n:x.name,s:x.status=="approved"?"ok":x.status=="rejected"?"bad":"wait"}});mylist()}
 async function refresh(){var s=await sb.auth.getSession();user=s.data.session?s.data.session.user:null;
-$("login").style.display=user?"none":"block";$("mycars").style.display=user?"block":"none";if(user)loadMine()}
+$("login").style.display=user?"none":"block";$("mycars").style.display=user?"block":"none";if(user){loadMine();loadAdmin()}else{$("adm").style.display="none"}}
 async function auth(kind){var em=$("em").value.trim(),pw=$("pw").value;if(!em||pw.length<6){toast("اكتب الإيميل وكلمة سر (6 أحرف على الأقل)");return}
 var r=kind=="in"?await sb.auth.signInWithPassword({email:em,password:pw}):await sb.auth.signUp({email:em,password:pw});
 if(r.error){toast(msg(r.error));return}
@@ -253,6 +254,19 @@ var r=await sb.from("cars").insert(row);if(r.error)throw r.error;
 files=[];showT();toast("وصلت. سيارتك قيد المراجعة.");await refresh();go("me")
 }catch(e){toast(msg(e))}
 btn.disabled=false;btn.textContent="أرسل للمراجعة"};
+async function loadAdmin(){var a=$("adm");a.style.display="none";
+var r=await sb.from("admins").select("user_id").eq("user_id",user.id);
+if(!r.data||!r.data.length)return;
+var q=await sb.from("cars").select("*").eq("status","pending").order("created_at",{ascending:true}),rows=q.data||[],paths=[],urls={};
+rows.forEach(function(x){(x.images||[]).forEach(function(p){paths.push(p)})});
+if(paths.length){var s=await sb.storage.from(BK).createSignedUrls(paths,3600);(s.data||[]).forEach(function(u){if(u.signedUrl)urls[u.path]=u.signedUrl})}
+a.style.display="block";
+a.innerHTML='<h2>للمراجعة ('+rows.length+')</h2>'+(rows.length?rows.map(function(x){return '<div class="mine" style="display:block"><b>'+esc(x.name)+'</b><div class="meta">'+esc(x.city)+' • '+esc(x.year)+' • '+esc(x.price)+' مليون • '+esc(x.phone)+'</div><div class="thumbs">'+(x.images||[]).map(function(p){return '<img style="width:88px;height:88px" data-u="'+esc(urls[p])+'" src="'+esc(urls[p])+'" alt="اضغط للتكبير">'}).join("")+'</div><p class="meta">'+esc(x.description)+'</p><div class="row"><button class="btn" data-id="'+esc(x.id)+'" data-s="approved">قبول</button><button class="btn alt" data-id="'+esc(x.id)+'" data-s="rejected">رفض</button></div></div>'}).join(""):'<p class="lead">ما كاين حتى سيارة تستنى.</p>')}
+$("adm").onclick=async function(e){var b=e.target.closest("button[data-id]");
+if(b){b.disabled=true;var r=await sb.from("cars").update({status:b.dataset.s}).eq("id",b.dataset.id);
+if(r.error){toast(msg(r.error));b.disabled=false;return}
+toast(b.dataset.s=="approved"?"تم القبول":"تم الرفض");loadAdmin();loadCars();loadMine();return}
+var im=e.target.closest("img");if(im)window.open(im.dataset.u,"_blank")};
 refresh();loadCars();
 </script>
 </body>
