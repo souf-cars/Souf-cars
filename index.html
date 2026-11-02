@@ -12,7 +12,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Souf Cars</title>
 <meta name="description" content="سوف كارز: سيارات جديدة ومستعملة للبيع في الوادي وبلدياتها.">
-<meta property="og:type" content="website"><meta property="og:title" content="سوف كارز"><meta property="og:description" content="سيارات جديدة ومستعملة للبيع في الوادي"><meta property="og:image" content="icon-512.png">
+<meta property="og:type" content="website"><meta property="og:title" content="سوف كارز"><meta property="og:description" content="سيارات جديدة ومستعملة للبيع في الوادي"><meta property="og:image" content="https://souf-cars.github.io/Souf-cars/icon-512.png"><meta property="og:url" content="https://souf-cars.github.io/Souf-cars/"><meta property="og:locale" content="ar_DZ"><meta name="twitter:card" content="summary">
+<link rel="preload" as="image" href="hero.webp"><link rel="preconnect" href="https://rujvziyjjfdjnhbuqhsr.supabase.co" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#eef1f4;--card:#fff;--ink:#12304a;--mute:#5d7184;--line:#d9e0e6;--dune:#e6cf9c;--gold:#b8860b;--ok:#1f6f5c;--wait:#a86a00;--bad:#b3392f;--chip:#e1e8ee;
@@ -113,7 +114,7 @@ main{box-shadow:0 0 60px rgba(18,48,74,.12);background:var(--bg)}
     <label for="bsel">العلامة</label><select id="bsel"></select>
     <label for="csel">البلدية</label><select id="csel"></select>
     <input class="search" id="q" type="search" placeholder="بحث: موديل، كلمة..." aria-label="بحث" style="margin-top:12px">
-    <div class="flt"><select id="fsort" aria-label="ترتيب"><option value="new">الأحدث</option><option value="pa">الأرخص</option><option value="pd">الأغلى</option><option value="ya">السنة: الأحدث</option></select><select id="fbody" aria-label="الهيكل"></select><select id="ffuel" aria-label="الطاقة"></select><input id="fpmax" inputmode="decimal" placeholder="أقصى سعر (مليون)" aria-label="أقصى سعر"><input id="fymin" inputmode="numeric" placeholder="من سنة" aria-label="من سنة"><button class="chip" id="ffav" aria-pressed="false">♥ المفضلة</button></div>
+    <div class="flt"><select id="fsort" aria-label="ترتيب"><option value="new">الأحدث</option><option value="pa">الأرخص</option><option value="pd">الأغلى</option><option value="ya">السنة: الأحدث</option></select><select id="fbody" aria-label="الهيكل"></select><select id="ffuel" aria-label="الطاقة"></select><select id="fgear" aria-label="علبة السرعات"><option value="">كل علب السرعات</option><option>يدوية</option><option>أوتوماتيكية</option></select><select id="fpap" aria-label="الأوراق"></select><input id="fpmin" inputmode="decimal" placeholder="أدنى سعر (مليون)" aria-label="أدنى سعر"><input id="fpmax" inputmode="decimal" placeholder="أقصى سعر (مليون)" aria-label="أقصى سعر"><input id="fkmax" inputmode="numeric" placeholder="أقصى كلم (ألف)" aria-label="أقصى مسافة"><input id="fymin" inputmode="numeric" placeholder="من سنة" aria-label="من سنة"><button class="chip" id="ffav" aria-pressed="false">♥ المفضلة</button></div>
   </div>
   <div id="list"></div>
 </section>
@@ -125,6 +126,7 @@ main{box-shadow:0 0 60px rgba(18,48,74,.12);background:var(--bg)}
   <label class="drop" style="margin:0;font-weight:400"><input id="f-img" type="file" accept="image/*" multiple hidden>اضغط باش تختار صور السيارة<br><small id="cnt">حتى 10 صور (0/10)</small></label><div class="thumbs" id="thumbs"></div>
   <label for="f-brand">الماركة (العلامة) *</label><select id="f-brand"></select>
   <div class="row"><div><label for="f-model">النوعية (الموديل) *</label><select id="f-model"></select></div><div><label for="f-trim">الطراز (الفئة)</label><input id="f-trim" list="trims" placeholder="Touch"></div></div>
+  <input id="f-other" placeholder="اكتب اسم الماركة والنوعية" style="display:none;margin-top:8px" maxlength="60" aria-label="الماركة والنوعية">
   <datalist id="trims"><option>Essentielle</option><option>Confort</option><option>Dynamique</option><option>Intens</option><option>Zen</option><option>Life</option><option>Touch</option><option>Premium</option><option>Luxe</option><option>Elegance</option><option>Style</option><option>Active</option><option>Allure</option><option>GT Line</option><option>Sport</option><option>Limited</option><option>Executive</option><option>Privilège</option><option>Business</option><option>Base</option><option>Full options</option></datalist>
   <div class="row">
     <div><label for="f-body">نوع الهيكل</label><select id="f-body"><option>سيدان</option><option>هاتشباك</option><option>SUV / 4×4</option><option>بيك أب</option><option>فان / مركبة نفعية</option><option>ميني فان</option><option>كوبيه</option><option>كابريوليه</option><option>شاحنة</option><option>حافلة</option></select></div>
@@ -140,6 +142,7 @@ main{box-shadow:0 0 60px rgba(18,48,74,.12);background:var(--bg)}
   </div>
   <div class="row"><div><label for="f-gear">علبة السرعات</label><select id="f-gear"><option>يدوية</option><option>أوتوماتيكية</option></select></div><div><label for="f-fuel">الطاقة</label><select id="f-fuel"><option>بنزين</option><option>مازوت</option><option>غاز (GPL)</option><option>هجين</option><option>كهربائية</option></select></div></div>
   <div class="row"><div><label for="f-eng">المحرك</label><input id="f-eng" placeholder="1.5 dCi"></div><div><label for="f-color">اللون</label><input id="f-color" placeholder="أبيض"></div></div>
+  <label for="f-sell">نوع البائع</label><select id="f-sell"><option value="individual">فرد</option><option value="dealer">معرض / وكالة</option></select>
   <label for="f-pap">الأوراق</label><select id="f-pap"><option>بطاقة رمادية</option><option>توكيل (وكالة)</option><option>أوراق جديدة / في طور التسجيل</option></select>
   <label>التجهيزات</label>
   <div class="meta" style="margin:8px 0 4px">الأمان</div>
@@ -167,6 +170,7 @@ main{box-shadow:0 0 60px rgba(18,48,74,.12);background:var(--bg)}
     <label for="pw">كلمة السر</label><input id="pw" type="password">
     <button class="btn" id="in">دخول</button>
     <button class="btn alt" id="reg">إنشاء حساب جديد</button>
+    <p class="meta" style="margin-top:12px">بالتسجيل توافق على <a href="privacy.html">الشروط وسياسة الخصوصية</a>.</p>
     <button class="btn alt link" id="forgot">نسيت كلمة السر؟</button>
   </div>
   <div id="rec" style="display:none"><h2>كلمة سر جديدة</h2><label for="np">كلمة السر الجديدة</label><input id="np" type="password"><button class="btn" id="npb">حفظ</button></div>
@@ -178,6 +182,7 @@ main{box-shadow:0 0 60px rgba(18,48,74,.12);background:var(--bg)}
     <button class="btn alt" id="out">خروج</button>
   </div>
 </section>
+<footer style="text-align:center;color:var(--mute);font-size:13px;padding:24px 0"><a href="privacy.html" style="color:inherit">الخصوصية والشروط</a></footer>
 </main>
 
 <nav aria-label="التنقل"><div>
@@ -208,6 +213,7 @@ function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(m){retur
 function msg(e){return e&&e.message?e.message:"حدث خطأ"}
 function fmt(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g," ")}
 function fp(c){return c.p+'<span>مليون</span>'+(c.neg?'<span> • قابل للتفاوض</span>':'')}
+function ago(d){if(!d)return"";var m=Math.floor((Date.now()-new Date(d))/6e4);if(m<60)return"قبل "+Math.max(m,1)+" دقيقة";var h=Math.floor(m/60);if(h<24)return"قبل "+h+" ساعة";var j=Math.floor(h/24);return j==1?"أمس":j<30?"قبل "+j+" يوم":"قبل "+Math.floor(j/30)+" شهر"}
 function fkm(c){return c.t=="new"?fmt(c.km)+' كلم':c.km+' ألف كلم'}
 function toast(t){var e=$("toast");e.textContent=t;e.style.display="block";setTimeout(function(){e.style.display="none"},2800)}
 function go(s){document.querySelectorAll(".screen").forEach(function(e){e.classList.toggle("on",e.id==s)});
@@ -217,12 +223,12 @@ function signedUrls(paths){return paths.length?sb.storage.from(BK).createSignedU
 
 /* ---------- عرض السيارات ---------- */
 function pic(c){return c.img?'<img src="'+esc(c.img)+'" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover">':'<svg viewBox="0 0 120 50"><use href="#car"/></svg>'}
-function specs(c){var r=[["الماركة",c.b],["النوعية",c.m],["الطراز",c.v],["السنة",c.y],["علبة السرعات",c.g],["الطاقة",c.f],["المحرك",c.e],["اللون",c.k],["الأوراق",c.pp],["الهيكل",c.bt],["الوسائد الهوائية",c.ab&&c.ab!="بدون"?c.ab+(c.abn?" ("+c.abn+")":""):""]];
+function specs(c){var r=[["الماركة",c.b],["النوعية",c.m],["الطراز",c.v],["السنة",c.y],["علبة السرعات",c.g],["الطاقة",c.f],["المحرك",c.e],["اللون",c.k],["الأوراق",c.pp],["البائع",c.st=="dealer"?"معرض / وكالة":c.st=="individual"?"فرد":""],["الهيكل",c.bt],["الوسائد الهوائية",c.ab&&c.ab!="بدون"?c.ab+(c.abn?" ("+c.abn+")":""):""]];
  return '<div class="spec">'+r.filter(function(x){return x[1]}).map(function(x){return '<div><b>'+x[0]+'</b>'+esc(x[1])+'</div>'}).join("")+'</div>'+(c.o&&c.o.length?'<p class="meta">'+c.o.map(esc).join(" • ")+'</p>':"")}
-function card(c,i){var f=favs.indexOf(c.id)>-1;return '<button class="car" data-i="'+i+'"><div class="pic"><span class="yr">'+esc(c.y)+'</span><span class="fav" role="button" aria-label="مفضلة" data-fav="'+esc(c.id)+'">'+(f?"♥":"♡")+'</span>'+pic(c)+'</div><div class="info"><h3>'+esc(c.n)+'</h3><div class="meta">'+esc(c.c)+' • '+fkm(c)+' • '+esc(c.g)+'</div><div class="price">'+fp(c)+'</div></div></button>'}
+function card(c,i){var f=favs.indexOf(c.id)>-1;return '<button class="car" data-i="'+i+'"><div class="pic"><span class="yr">'+esc(c.y)+'</span><span class="fav" role="button" aria-label="مفضلة" data-fav="'+esc(c.id)+'">'+(f?"♥":"♡")+'</span>'+pic(c)+'</div><div class="info"><h3>'+esc(c.n)+'</h3><div class="meta">'+esc(c.c)+' • '+fkm(c)+' • '+esc(c.g)+(c.st=="dealer"?' • معرض':'')+(c.dt?' • '+ago(c.dt):'')+'</div><div class="price">'+fp(c)+'</div></div></button>'}
 function fillBrands(){var bs=["الكل"].concat(cars.filter(function(c){return c.t==tab}).map(function(c){return c.b}).filter(function(v,i,a){return a.indexOf(v)==i}));
  $("bsel").innerHTML=bs.map(function(b){return '<option'+(b==brand?' selected':'')+'>'+esc(b)+'</option>'}).join("")}
-var shown=12,favs=[],sortK="new",fb={body:"",fuel:"",pmax:0,ymin:0,fav:false};
+var shown=12,favs=[],sortK="new",fb={body:"",fuel:"",pmax:0,pmin:0,kmax:0,gear:"",pap:"",ymin:0,fav:false};
 try{favs=JSON.parse(localStorage.getItem("fav")||"[]")}catch(e){}
 function saveFav(){try{localStorage.setItem("fav",JSON.stringify(favs))}catch(e){}}
 function norm(s){return String(s==null?"":s).toLowerCase().replace(/[\u064B-\u0652\u0640]/g,"").replace(/[أإآ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه")}
@@ -239,7 +245,7 @@ function render(more){var q=norm($("q").value.trim()).split(/\s+/).filter(Boolea
  if(!more)shown=12;
  cars.forEach(function(c,i){
   if(c.t!=tab||(brand!="الكل"&&c.b!=brand)||(cityF!="الكل"&&c.c!=cityF))return;
-  if((fb.body&&c.bt!=fb.body)||(fb.fuel&&c.f!=fb.fuel)||(fb.pmax&&+c.p>fb.pmax)||(fb.ymin&&+c.y<fb.ymin)||(fb.fav&&favs.indexOf(c.id)<0))return;
+  if((fb.body&&c.bt!=fb.body)||(fb.fuel&&c.f!=fb.fuel)||(fb.pmax&&+c.p>fb.pmax)||(fb.pmin&&+c.p<fb.pmin)||(fb.gear&&c.g!=fb.gear)||(fb.pap&&c.pp!=fb.pap)||(fb.kmax&&(c.t=="new"?c.km/1000:+c.km)>fb.kmax)||(fb.ymin&&+c.y<fb.ymin)||(fb.fav&&favs.indexOf(c.id)<0))return;
   var hay=norm([c.n,c.b,c.m,c.c,c.d,c.e,c.k,c.v].join(" "));
   if(q.every(function(w){return hay.indexOf(w)>-1}))idx.push(i)});
  var k=sortK;if(k!="new")idx.sort(function(a,b){var A=cars[a],B=cars[b];return k=="pa"?A.p-B.p:k=="pd"?B.p-A.p:B.y-A.y});
@@ -247,19 +253,22 @@ function render(more){var q=norm($("q").value.trim()).split(/\s+/).filter(Boolea
  if(idx.length>shown)h+='<button class="btn alt" id="more">عرض المزيد ('+(idx.length-shown)+')</button>';
  $("list").innerHTML=h||'<p class="lead">ما كاين حتى سيارة بهذا البحث.</p>'}
 function mylist(){var L={ok:["منشورة","ok"],wait:["قيد المراجعة","wait"],bad:["مرفوضة","bad"],sold:["تباعت","wait"]};
- $("mylist").innerHTML=mine.length?mine.map(function(m){return '<div class="mine" style="display:block"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>'+esc(m.n)+'</b><span class="badge '+L[m.s][1]+'">'+L[m.s][0]+'</span></div>'+(m.s=="bad"&&m.why?'<p class="meta">السبب: '+esc(m.why)+'</p>':'')+'<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button class="chip" data-edit="'+esc(m.id)+'">✏️ تعديل</button>'+(m.s=="ok"?'<button class="chip" data-sold="'+esc(m.id)+'">✅ تباعت</button>':'')+'<button class="chip" data-del="'+esc(m.id)+'">🗑️ مسح</button></div></div>'}).join(""):'<p class="lead">ما زدت حتى سيارة بعد.</p>'}
+ $("mylist").innerHTML=mine.length?mine.map(function(m){return '<div class="mine" style="display:block"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>'+esc(m.n)+'</b><span class="badge '+(m.s=="ok"&&m.exp?"wait":L[m.s][1])+'">'+(m.s=="ok"&&m.exp?"منتهية":L[m.s][0])+'</span></div>'+(m.s=="bad"&&m.why?'<p class="meta">السبب: '+esc(m.why)+'</p>':'')+'<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button class="chip" data-edit="'+esc(m.id)+'">✏️ تعديل</button>'+(m.s=="ok"?'<button class="chip" data-sold="'+esc(m.id)+'">✅ تباعت</button><button class="chip" data-renew="'+esc(m.id)+'">🔄 جدّد</button>':'')+(m.s=="sold"?'<button class="chip" data-repub="'+esc(m.id)+'">↩️ أعد النشر</button>':'')+'<button class="chip" data-del="'+esc(m.id)+'">🗑️ مسح</button></div></div>'}).join(""):'<p class="lead">ما زدت حتى سيارة بعد.</p>'}
 
 /* ---------- Supabase ---------- */
 async function loadCars(){
- var r=await sb.from("cars").select("*").eq("status","approved").order("created_at",{ascending:false});
- if(r.error){toast("تعذر جلب السيارات");$("list").innerHTML='<p class="lead">تعذر جلب السيارات. تأكد من الأنترنت وعاود.</p>';return}
+ var r=await sb.from("cars").select("*").eq("status","approved").or("expires_at.is.null,expires_at.gt."+new Date().toISOString()).order("created_at",{ascending:false});
+ if(r.error){var cc=null;try{cc=JSON.parse(localStorage.getItem("cars_cache")||"null")}catch(e){}
+  if(cc&&cc.length){cars=cc;toast("بدون اتصال: آخر قائمة محفوظة");fillBrands();render();return}
+  toast("تعذر جلب السيارات");$("list").innerHTML='<p class="lead">تعذر جلب السيارات. تأكد من الأنترنت وعاود.</p>';return}
  var rows=r.data||[],urls=await signedUrls(rows.map(function(x){return x.images&&x.images[0]}).filter(Boolean));
  cars=rows.map(function(x){var nw=x.condition=="new",k=x.mileage||0;
-  return{n:x.name,b:x.brand,m:x.model,v:x.trim,y:x.year,p:x.price,km:nw?k:Math.round(k/1000),c:x.city,d:x.description||"",t:x.condition,g:GM[x.gearbox]||"",f:x.fuel,e:x.engine,k:x.color,pp:x.papers,neg:x.negotiable,o:x.options||[],ph:x.phone,img:urls[x.images&&x.images[0]],id:x.id,bt:x.body_type,ab:x.airbags_type,abn:x.airbags_count,im:x.images||[]}});
+  return{n:x.name,b:x.brand,m:x.model,v:x.trim,y:x.year,p:x.price,km:nw?k:Math.round(k/1000),c:x.city,d:x.description||"",t:x.condition,g:GM[x.gearbox]||"",f:x.fuel,e:x.engine,k:x.color,pp:x.papers,neg:x.negotiable,o:x.options||[],ph:x.phone,img:urls[x.images&&x.images[0]],id:x.id,bt:x.body_type,ab:x.airbags_type,abn:x.airbags_count,im:x.images||[],dt:x.created_at,st:x.seller_type}});
+ try{localStorage.setItem("cars_cache",JSON.stringify(cars.map(function(c){var o={};for(var k in c)if(k!="img")o[k]=c[k];return o})))}catch(e){}
  fillBrands();render();if(location.hash.indexOf("#car-")==0)route()}
 async function loadMine(){
  var r=await sb.from("cars").select("*").eq("owner_id",user.id).order("created_at",{ascending:false});
- mine=(r.data||[]).map(function(x){return{id:x.id,n:x.name,im:x.images||[],s:x.status=="approved"?"ok":x.status=="rejected"?"bad":x.status=="sold"?"sold":"wait",why:x.reject_reason,p:x.price,ph:x.phone,d:x.description||"",neg:x.negotiable}});mylist()}
+ mine=(r.data||[]).map(function(x){return{id:x.id,n:x.name,im:x.images||[],s:x.status=="approved"?"ok":x.status=="rejected"?"bad":x.status=="sold"?"sold":"wait",why:x.reject_reason,p:x.price,ph:x.phone,d:x.description||"",neg:x.negotiable,y:x.year,exp:!!(x.expires_at&&new Date(x.expires_at)<new Date())}});mylist()}
 async function refresh(){
  var s=await sb.auth.getSession();user=s.data.session?s.data.session.user:null;
  if(recov){$("login").style.display="none";$("mycars").style.display="none";$("rec").style.display="block";return}
@@ -280,7 +289,8 @@ async function loadAdmin(){
  rows.forEach(function(x){(x.images||[]).forEach(function(p){paths.push(p)})});
  var urls=await signedUrls(paths);
  a.style.display="block";
- a.innerHTML='<h2>للمراجعة ('+rows.length+')</h2>'+(rows.length?rows.map(function(x){return '<div class="mine" style="display:block"><b>'+esc(x.name)+'</b><div class="meta">'+esc(x.city)+' • '+esc(x.year)+' • '+esc(x.price)+' مليون • '+esc(x.phone)+'</div><div class="thumbs">'+(x.images||[]).map(function(p){return '<img style="width:88px;height:88px" data-u="'+esc(urls[p])+'" src="'+esc(urls[p])+'" alt="اضغط للتكبير">'}).join("")+'</div><p class="meta">'+esc(x.description)+'</p><div class="row"><button class="btn" data-id="'+esc(x.id)+'" data-s="approved">قبول</button><button class="btn alt" data-id="'+esc(x.id)+'" data-s="rejected">رفض</button></div></div>'}).join(""):'<p class="lead">ما كاين حتى سيارة تستنى.</p>')}
+ var rq=await sb.from("reports").select("id,car_id,reason,cars(name)").order("created_at",{ascending:false}),rr=rq.data||[];
+ a.innerHTML='<h2>للمراجعة ('+rows.length+')</h2>'+(rows.length?rows.map(function(x){return '<div class="mine" style="display:block"><b>'+esc(x.name)+'</b><div class="meta">'+esc(x.city)+' • '+esc(x.year)+' • '+esc(x.price)+' مليون • '+esc(x.phone)+'</div><div class="thumbs">'+(x.images||[]).map(function(p){return '<img style="width:88px;height:88px" data-u="'+esc(urls[p])+'" src="'+esc(urls[p])+'" alt="اضغط للتكبير">'}).join("")+'</div><p class="meta">'+esc(x.description)+'</p><div class="row"><button class="btn" data-id="'+esc(x.id)+'" data-s="approved">قبول</button><button class="btn alt" data-id="'+esc(x.id)+'" data-s="rejected">رفض</button></div></div>'}).join(""):'<p class="lead">ما كاين حتى سيارة تستنى.</p>')+'<h2>البلاغات ('+rr.length+')</h2>'+(rr.length?rr.map(function(r){return '<div class="mine" style="display:block"><b>'+esc(r.cars?r.cars.name:"")+'</b><p class="meta">'+esc(r.reason)+'</p><div class="row"><button class="btn" data-rhide="'+esc(r.car_id)+'">إخفاء الإعلان</button><button class="btn alt" data-rdel="'+esc(r.id)+'">تجاهل</button></div></div>'}).join(""):'<p class="lead">ما كاين حتى بلاغ.</p>')}
 
 /* ---------- فورم الإضافة ---------- */
 $("f-brand").innerHTML='<option value="">اختر الماركة</option>'+GR.map(function(g){return '<optgroup label="'+g[0]+'">'+g[1].split(";").map(function(s){var p=s.split("|");MD[p[0]]=p[1].split(",");return '<option>'+p[0]+'</option>'}).join("")+'</optgroup>'}).join("")+'<option>أخرى</option>';
@@ -296,7 +306,9 @@ seg("fseg",function(t){$("km-l").textContent=t=="new"?"المسافة المقط
 $("bsel").onchange=function(){brand=this.value;render()};
 $("csel").onchange=function(){cityF=this.value;render()};
 $("q").oninput=function(){render()};
-$("f-brand").onchange=function(){var m=MD[this.value]||[];$("f-model").innerHTML='<option value="">اختر النوعية</option>'+m.concat(["أخرى"]).map(function(x){return '<option>'+x+'</option>'}).join("")};
+function chkOther(){$("f-other").style.display=($("f-brand").value=="أخرى"||$("f-model").value=="أخرى")?"block":"none"}
+$("f-brand").onchange=function(){var m=MD[this.value]||[];$("f-model").innerHTML='<option value="">اختر النوعية</option>'+m.concat(["أخرى"]).map(function(x){return '<option>'+x+'</option>'}).join("");if(this.value=="أخرى")$("f-model").value="أخرى";chkOther()};
+$("f-model").onchange=chkOther;
 $("f-img").onchange=function(){[].slice.call(this.files).forEach(function(f){if(files.length<10)files.push(f);else toast("10 صور كحد أقصى")});this.value="";showT()};
 $("thumbs").onclick=function(e){if(e.target.tagName=="IMG"){files.splice(+e.target.dataset.i,1);showT()}};
 function closeSheet(){$("sheet").classList.remove("on");if(/^#car-/.test(location.hash))history.replaceState(null,"",location.pathname+location.search)}
@@ -306,10 +318,11 @@ function route(){var m=/^#car-(.+)$/.exec(location.hash);
  for(var i=0;i<cars.length;i++)if(String(cars[i].id)==m[1]){openCar(i);return}}
 function openCar(i){var c=cars[i];if(!c)return;var ph=String(c.ph||"").replace(/[^0-9+]/g,""),wa=waNum(ph),im=c.im||[];
  $("det").dataset.id=c.id;
- $("det").innerHTML='<div class="pic" id="mainpic" style="border-radius:16px;overflow:hidden"><span class="yr">'+esc(c.y)+'</span>'+pic(c)+'</div><div class="gal" id="gal"></div><h2>'+esc(c.n)+'</h2><div class="price">'+fp(c)+'</div><p class="meta">'+esc(c.c)+' • '+fkm(c)+'</p>'+specs(c)+'<p>'+esc(c.d)+'</p>'+(ph?'<a class="btn" href="tel:'+ph+'" style="display:block;text-align:center;text-decoration:none">اتصل بالبائع</a>':'')+(wa?'<a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/'+wa+'?text='+encodeURIComponent("السلام عليكم، مهتم بـ "+c.n+" (سوف كارز)")+'" style="display:block;text-align:center;text-decoration:none">واتساب</a>':'')+'<button class="btn alt" id="shr">مشاركة</button><button class="btn alt" id="close">إغلاق</button>';
+ $("det").innerHTML='<div class="pic" id="mainpic" style="border-radius:16px;overflow:hidden"><span class="yr">'+esc(c.y)+'</span>'+pic(c)+'</div><div class="gal" id="gal"></div><h2>'+esc(c.n)+'</h2><div class="price">'+fp(c)+'</div><p class="meta">≈ '+fmt(Math.round(+c.p*10000))+' دج (1 مليون = 10 000 دج)</p><p class="meta">'+esc(c.c)+' • '+fkm(c)+(c.dt?' • '+ago(c.dt):'')+'</p>'+specs(c)+'<p>'+esc(c.d)+'</p>'+(ph?'<a class="btn" href="tel:'+ph+'" style="display:block;text-align:center;text-decoration:none">اتصل بالبائع</a>':'')+(wa?'<a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/'+wa+'?text='+encodeURIComponent("السلام عليكم، مهتم بـ "+c.n+" (سوف كارز)")+'" style="display:block;text-align:center;text-decoration:none">واتساب</a>':'')+'<button class="btn alt" id="shr">مشاركة</button><button class="btn alt link" id="rpt">بلّغ عن هذا الإعلان</button><button class="btn alt" id="close">إغلاق</button>';
  $("sheet").classList.add("on");
  if(location.hash!="#car-"+c.id)location.hash="car-"+c.id;
  $("close").onclick=closeSheet;
+ $("rpt").onclick=async function(){var r=prompt("سبب البلاغ (نصب، سعر وهمي، تكرار...):");if(!r||r.trim().length<3)return;var x=await sb.from("reports").insert({car_id:c.id,reason:r.trim().slice(0,300)});toast(x.error?"ما قدرتش نبعت البلاغ":"وصلنا البلاغ، شكراً")};
  $("shr").onclick=function(){var u=location.origin+location.pathname+"#car-"+c.id;if(navigator.share)navigator.share({title:c.n,url:u}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(u).then(function(){toast("تم نسخ الرابط")});else prompt("",u)};
  if(im.length>1)signedUrls(im).then(function(u){var ls=im.map(function(p){return u[p]}).filter(Boolean);if(ls.length<2||$("det").dataset.id!=c.id)return;
   $("gal").innerHTML=ls.map(function(x,k){return '<img data-s="'+esc(x)+'" class="'+(k?"":"on")+'" src="'+esc(x)+'" alt="">'}).join("");
@@ -323,14 +336,22 @@ $("sheet").onclick=function(e){if(e.target==$("sheet"))closeSheet()};
 addEventListener("hashchange",route);
 addEventListener("keydown",function(e){if(e.key=="Escape")closeSheet()});
 $("mylist").onclick=async function(e){
+ var rn=e.target.closest("button[data-renew]");
+ if(rn){rn.disabled=true;var x1=await sb.from("cars").update({expires_at:new Date(Date.now()+60*864e5).toISOString()}).eq("id",rn.dataset.renew).select();
+  if(x1.error||!x1.data||!x1.data.length){toast(x1.error?msg(x1.error):"ما قدرتش نجدد");rn.disabled=false;return}
+  toast("تم التجديد 60 يوم");loadMine();loadCars();return}
+ var rp2=e.target.closest("button[data-repub]");
+ if(rp2){rp2.disabled=true;var x2=await sb.from("cars").update({status:"pending"}).eq("id",rp2.dataset.repub).select();
+  if(x2.error||!x2.data||!x2.data.length){toast(x2.error?msg(x2.error):"ما قدرتش نعيد النشر");rp2.disabled=false;return}
+  toast("رجع للمراجعة");loadMine();loadAdmin();return}
  var be=e.target.closest("button[data-edit]");
  if(be){var m=mine.filter(function(x){return x.id==be.dataset.edit})[0];if(!m)return;
   $("det").dataset.id="";
-  $("det").innerHTML='<h2>تعديل الإعلان</h2><p class="meta">'+esc(m.n)+'</p><label for="e-price">السعر (مليون)</label><input id="e-price" inputmode="decimal" value="'+esc(m.p)+'"><label for="e-phone">رقم الهاتف</label><input id="e-phone" inputmode="tel" value="'+esc(m.ph)+'"><label for="e-desc">وصف</label><textarea id="e-desc" rows="3">'+esc(m.d)+'</textarea><div class="opts" style="margin-top:12px"><label><input type="checkbox" id="e-neg"'+(m.neg?" checked":"")+'> السعر قابل للتفاوض</label></div><button class="btn" id="e-save">حفظ</button><button class="btn alt" id="e-x">إلغاء</button>';
+  $("det").innerHTML='<h2>تعديل الإعلان</h2><p class="meta">'+esc(m.n)+'</p><label for="e-price">السعر (مليون)</label><input id="e-price" inputmode="decimal" value="'+esc(m.p)+'"><label for="e-phone">رقم الهاتف</label><input id="e-phone" inputmode="tel" value="'+esc(m.ph)+'"><label for="e-year">السنة</label><input id="e-year" inputmode="numeric" value="'+esc(m.y)+'"><label for="e-desc">وصف</label><textarea id="e-desc" rows="3">'+esc(m.d)+'</textarea><div class="opts" style="margin-top:12px"><label><input type="checkbox" id="e-neg"'+(m.neg?" checked":"")+'> السعر قابل للتفاوض</label></div><button class="btn" id="e-save">حفظ</button><button class="btn alt" id="e-x">إلغاء</button>';
   $("sheet").classList.add("on");$("e-x").onclick=closeSheet;
-  $("e-save").onclick=async function(){var pr=parseFloat($("e-price").value),ph=normPhone($("e-phone").value),d=$("e-desc").value.trim();
-   if(!pr){toast("اكتب السعر");return}if(!ph){toast("رقم هاتف غير صحيح");return}
-   var up={price:pr,phone:ph,description:d||null,negotiable:$("e-neg").checked};if((ph!=m.ph||d!=m.d)&&m.s=="ok")up.status="pending";
+  $("e-save").onclick=async function(){var pr=parseFloat($("e-price").value),ph=normPhone($("e-phone").value),d=$("e-desc").value.trim(),yr=parseInt($("e-year").value);
+   if(!pr){toast("اكتب السعر");return}if(!ph){toast("رقم هاتف غير صحيح");return}if(!yr||yr<1980||yr>new Date().getFullYear()+1){toast("السنة غير صحيحة");return}
+   var up={price:pr,phone:ph,description:d||null,negotiable:$("e-neg").checked,year:yr};if(((ph!=m.ph||d!=m.d||yr!=m.y)&&m.s=="ok")||m.s=="bad")up.status="pending";
    this.disabled=true;var r=await sb.from("cars").update(up).eq("id",m.id).select();
    if(r.error||!r.data||!r.data.length){toast(r.error?msg(r.error):"ما قدرتش نحفظ التعديل");this.disabled=false;return}
    closeSheet();toast(up.status?"تم الحفظ. الإعلان رجع للمراجعة":"تم الحفظ");loadMine();loadCars();loadAdmin()};
@@ -347,7 +368,14 @@ $("mylist").onclick=async function(e){
  if(r.error||!r.data||!r.data.length){toast(r.error?msg(r.error):"ما قدرتش نمسح الإعلان");b.disabled=false;return}
  if(m2.im.length)await sb.storage.from(BK).remove(m2.im);
  toast("تم مسح الإعلان");loadMine();loadCars();loadAdmin()};
-$("adm").onclick=async function(e){var b=e.target.closest("button[data-id]");
+$("adm").onclick=async function(e){
+ var rh=e.target.closest("button[data-rhide]");
+ if(rh){rh.disabled=true;var q1=await sb.from("cars").update({status:"rejected",reject_reason:"تم الإبلاغ عن الإعلان"}).eq("id",rh.dataset.rhide);
+  if(q1.error){toast(msg(q1.error));rh.disabled=false;return}
+  await sb.from("reports").delete().eq("car_id",rh.dataset.rhide);toast("تم إخفاء الإعلان");loadAdmin();loadCars();return}
+ var rd=e.target.closest("button[data-rdel]");
+ if(rd){rd.disabled=true;await sb.from("reports").delete().eq("id",rd.dataset.rdel);loadAdmin();return}
+ var b=e.target.closest("button[data-id]");
  if(b){var rs=null;if(b.dataset.s=="rejected"){rs=prompt("سبب الرفض (يظهر للمستخدم):");if(rs===null)return}
   b.disabled=true;var up={status:b.dataset.s};if(rs)up.reject_reason=rs;
   var r=await sb.from("cars").update(up).eq("id",b.dataset.id);
@@ -366,6 +394,8 @@ $("send").onclick=async function(){
  if(!user){toast("ادخل بحسابك أولاً");go("me");return}
  var br=$("f-brand").value,md=$("f-model").value;
  if(!br||!md){toast("اختر الماركة والنوعية");return}
+ var oth=$("f-other").value.trim();if((br=="أخرى"||md=="أخرى")&&!oth){toast("اكتب اسم السيارة");return}
+ var mdv=md=="أخرى"?oth:md,nm=((br=="أخرى"?oth:br+" "+mdv)+" "+$("f-trim").value).trim();
  var pr=parseFloat($("f-price").value),yr=parseInt($("f-year").value),kmv=parseFloat($("f-km").value)||0;
  var phv=normPhone($("f-phone").value);
  if(!pr||!yr){toast("السعر والسنة إجباريين");return}
@@ -378,17 +408,22 @@ $("send").onclick=async function(){
   for(var i=0;i<files.length;i++){var f=await shrink(files[i]),isj=f!==files[i],p=user.id+"/"+Date.now()+"_"+i+"."+(isj?"jpg":(files[i].name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg");
    var u=await sb.storage.from(BK).upload(p,f,{contentType:isj?"image/jpeg":files[i].type});if(u.error)throw u.error;paths.push(p)}
   var opts=[].slice.call(document.querySelectorAll("#add .opts input[type=checkbox]:checked")).filter(function(x){return x.id!="f-neg"}).map(function(x){return x.parentNode.textContent.trim()});
-  var row={name:(br+" "+md+" "+$("f-trim").value).trim(),brand:br,model:md,trim:$("f-trim").value.trim()||null,condition:nw?"new":"used",year:yr,price:pr,mileage:Math.round(nw?kmv:kmv*1000),city:$("f-city").value,phone:phv,body_type:$("f-body").value,gearbox:$("f-gear").value=="يدوية"?"manual":"automatic",fuel:$("f-fuel").value,engine:$("f-eng").value.trim()||null,color:$("f-color").value.trim()||null,papers:$("f-pap").value,negotiable:$("f-neg").checked,airbags_type:$("f-air").value,airbags_count:parseInt($("f-airn").value)||null,options:opts,images:paths,description:$("f-desc").value.trim()||null,status:"pending"};
+  var row={name:nm,brand:br,model:mdv,seller_type:$("f-sell").value,trim:$("f-trim").value.trim()||null,condition:nw?"new":"used",year:yr,price:pr,mileage:Math.round(nw?kmv:kmv*1000),city:$("f-city").value,phone:phv,body_type:$("f-body").value,gearbox:$("f-gear").value=="يدوية"?"manual":"automatic",fuel:$("f-fuel").value,engine:$("f-eng").value.trim()||null,color:$("f-color").value.trim()||null,papers:$("f-pap").value,negotiable:$("f-neg").checked,airbags_type:$("f-air").value,airbags_count:parseInt($("f-airn").value)||null,options:opts,images:paths,description:$("f-desc").value.trim()||null,status:"pending"};
   var r=await sb.from("cars").insert(row);if(r.error)throw r.error;saved=true;
-  files=[];showT();toast("وصلت. سيارتك قيد المراجعة.");await refresh();go("me")
+  files=[];showT();$("f-other").value="";toast("وصلت. سيارتك قيد المراجعة.");await refresh();go("me")
  }catch(e){if(!saved&&paths.length)sb.storage.from(BK).remove(paths);toast(msg(e))}
  btn.disabled=false;btn.textContent="أرسل للمراجعة"};
 
 $("fbody").innerHTML='<option value="">كل الهياكل</option>'+$("f-body").innerHTML;
+$("fpap").innerHTML='<option value="">كل الأوراق</option>'+$("f-pap").innerHTML;
 $("ffuel").innerHTML='<option value="">كل الطاقات</option>'+$("f-fuel").innerHTML;
 $("fsort").onchange=function(){sortK=this.value;render()};
 $("fbody").onchange=function(){fb.body=this.value;render()};
 $("ffuel").onchange=function(){fb.fuel=this.value;render()};
+$("fgear").onchange=function(){fb.gear=this.value;render()};
+$("fpap").onchange=function(){fb.pap=this.value;render()};
+$("fpmin").oninput=function(){fb.pmin=parseFloat(this.value)||0;render()};
+$("fkmax").oninput=function(){fb.kmax=parseFloat(this.value)||0;render()};
 $("fpmax").oninput=function(){fb.pmax=parseFloat(this.value)||0;render()};
 $("fymin").oninput=function(){fb.ymin=parseInt(this.value)||0;render()};
 $("ffav").onclick=function(){fb.fav=!fb.fav;this.setAttribute("aria-pressed",fb.fav);render()};
