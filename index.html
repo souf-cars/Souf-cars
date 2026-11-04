@@ -281,6 +281,28 @@ async function auth(kind){
  if(r.error){toast(msg(r.error));return}
  if(kind=="up"&&!r.data.session){toast("تفقد إيميلك وأكّد الحساب، وبعدها ادخل");return}
  refresh()}
+var ADM_ST={approved:["منشورة","ok"],pending:["قيد المراجعة","wait"],rejected:["مخفية","bad"],sold:["تباعت","wait"]},admT=null;
+var ADM_HTML='<h2>كل الإعلانات</h2><input id="adm-q" placeholder="ابحث بالاسم أو رقم الهاتف" maxlength="40" aria-label="بحث"><select id="adm-st" aria-label="الحالة"><option value="">كل الحالات</option><option value="approved">منشورة</option><option value="pending">قيد المراجعة</option><option value="rejected">مخفية</option><option value="sold">تباعت</option></select><div id="adm-all"></div>';
+function admBind(){$("adm-q").oninput=function(){clearTimeout(admT);admT=setTimeout(admAll,350)};$("adm-st").onchange=admAll}
+async function admAll(){
+ var box=$("adm-all");if(!box)return;
+ var q=$("adm-q").value.replace(/[,()%*\\]/g,"").trim(),st=$("adm-st").value;
+ var b=sb.from("cars").select("id,name,city,year,price,phone,status,created_at,expires_at").order("created_at",{ascending:false}).limit(100);
+ if(st)b=b.eq("status",st);
+ if(q)b=b.or("name.ilike.%"+q+"%,phone.ilike.%"+q+"%");
+ var r=await b;if(r.error){box.innerHTML='<p class="lead">تعذر جلب الإعلانات</p>';return}
+ var rows=r.data||[];
+ box.innerHTML='<p class="meta">'+rows.length+' إعلان'+(rows.length==100?' (أول 100)':'')+'</p>'+(rows.length?rows.map(function(x){var s=ADM_ST[x.status]||[x.status,"wait"],ex=x.status=="approved"&&x.expires_at&&new Date(x.expires_at)<new Date();return '<div class="mine" style="display:block"><b>'+esc(x.name)+'</b> <span class="badge '+(ex?"wait":s[1])+'">'+(ex?"منتهية":s[0])+'</span><div class="meta">'+esc(x.city)+' • '+esc(x.year)+' • '+esc(x.price)+' مليون • '+esc(x.phone)+' • '+ago(x.created_at)+'</div><div class="row">'+(x.status=="approved"?'<button class="btn alt" data-ah="'+esc(x.id)+'">إخفاء</button>':'<button class="btn" data-as="'+esc(x.id)+'">إظهار</button>')+'<button class="btn alt" data-ad="'+esc(x.id)+'">مسح</button></div></div>'}).join(""):'<p class="lead">ما كاين نتائج.</p>')}
+async function admClean(){
+ try{var old=new Date(Date.now()-2*864e5).toISOString();
+  var r=await sb.from("cars").select("id,images").lt("expires_at",old).neq("status","pending").limit(40);
+  var rows=r.data||[];if(r.error||!rows.length)return;
+  var n=0;
+  for(var i=0;i<rows.length;i++){var x=rows[i],im=x.images||[];
+   if(im.length){var d=await sb.storage.from(BK).remove(im);if(d.error)continue}
+   var q=await sb.from("cars").delete().eq("id",x.id);if(!q.error)n++}
+  if(n){toast("تم مسح "+n+" إعلان منتهي مع صوره");loadCars()}
+ }catch(e){}}
 async function loadAdmin(){
  var a=$("adm");a.style.display="none";
  var r=await sb.from("admins").select("user_id").eq("user_id",user.id);
@@ -290,7 +312,7 @@ async function loadAdmin(){
  var urls=await signedUrls(paths);
  a.style.display="block";
  var rq=await sb.from("reports").select("id,car_id,reason,cars(name)").order("created_at",{ascending:false}),rr=rq.data||[];
- a.innerHTML='<h2>للمراجعة ('+rows.length+')</h2>'+(rows.length?rows.map(function(x){return '<div class="mine" style="display:block"><b>'+esc(x.name)+'</b><div class="meta">'+esc(x.city)+' • '+esc(x.year)+' • '+esc(x.price)+' مليون • '+esc(x.phone)+'</div><div class="thumbs">'+(x.images||[]).map(function(p){return '<img style="width:88px;height:88px" data-u="'+esc(urls[p])+'" src="'+esc(urls[p])+'" alt="اضغط للتكبير">'}).join("")+'</div><p class="meta">'+esc(x.description)+'</p><div class="row"><button class="btn" data-id="'+esc(x.id)+'" data-s="approved">قبول</button><button class="btn alt" data-id="'+esc(x.id)+'" data-s="rejected">رفض</button></div></div>'}).join(""):'<p class="lead">ما كاين حتى سيارة تستنى.</p>')+'<h2>البلاغات ('+rr.length+')</h2>'+(rr.length?rr.map(function(r){return '<div class="mine" style="display:block"><b>'+esc(r.cars?r.cars.name:"")+'</b><p class="meta">'+esc(r.reason)+'</p><div class="row"><button class="btn" data-rhide="'+esc(r.car_id)+'">إخفاء الإعلان</button><button class="btn alt" data-rdel="'+esc(r.id)+'">تجاهل</button></div></div>'}).join(""):'<p class="lead">ما كاين حتى بلاغ.</p>')}
+ a.innerHTML='<h2>للمراجعة ('+rows.length+')</h2>'+(rows.length?rows.map(function(x){return '<div class="mine" style="display:block"><b>'+esc(x.name)+'</b><div class="meta">'+esc(x.city)+' • '+esc(x.year)+' • '+esc(x.price)+' مليون • '+esc(x.phone)+'</div><div class="thumbs">'+(x.images||[]).map(function(p){return '<img style="width:88px;height:88px" data-u="'+esc(urls[p])+'" src="'+esc(urls[p])+'" alt="اضغط للتكبير">'}).join("")+'</div><p class="meta">'+esc(x.description)+'</p><div class="row"><button class="btn" data-id="'+esc(x.id)+'" data-s="approved">قبول</button><button class="btn alt" data-id="'+esc(x.id)+'" data-s="rejected">رفض</button></div></div>'}).join(""):'<p class="lead">ما كاين حتى سيارة تستنى.</p>')+'<h2>البلاغات ('+rr.length+')</h2>'+(rr.length?rr.map(function(r){return '<div class="mine" style="display:block"><b>'+esc(r.cars?r.cars.name:"")+'</b><p class="meta">'+esc(r.reason)+'</p><div class="row"><button class="btn" data-rhide="'+esc(r.car_id)+'">إخفاء الإعلان</button><button class="btn alt" data-rdel="'+esc(r.id)+'">تجاهل</button></div></div>'}).join(""):'<p class="lead">ما كاين حتى بلاغ.</p>')+ADM_HTML;admBind();admAll();admClean()}
 
 /* ---------- فورم الإضافة ---------- */
 $("f-brand").innerHTML='<option value="">اختر الماركة</option>'+GR.map(function(g){return '<optgroup label="'+g[0]+'">'+g[1].split(";").map(function(s){var p=s.split("|");MD[p[0]]=p[1].split(",");return '<option>'+p[0]+'</option>'}).join("")+'</optgroup>'}).join("")+'<option>أخرى</option>';
@@ -337,9 +359,9 @@ addEventListener("hashchange",route);
 addEventListener("keydown",function(e){if(e.key=="Escape")closeSheet()});
 $("mylist").onclick=async function(e){
  var rn=e.target.closest("button[data-renew]");
- if(rn){rn.disabled=true;var x1=await sb.from("cars").update({expires_at:new Date(Date.now()+60*864e5).toISOString()}).eq("id",rn.dataset.renew).select();
+ if(rn){rn.disabled=true;var x1=await sb.from("cars").update({expires_at:new Date(Date.now()+14*864e5).toISOString()}).eq("id",rn.dataset.renew).select();
   if(x1.error||!x1.data||!x1.data.length){toast(x1.error?msg(x1.error):"ما قدرتش نجدد");rn.disabled=false;return}
-  toast("تم التجديد 60 يوم");loadMine();loadCars();return}
+  toast("تم التجديد 14 يوم");loadMine();loadCars();return}
  var rp2=e.target.closest("button[data-repub]");
  if(rp2){rp2.disabled=true;var x2=await sb.from("cars").update({status:"pending"}).eq("id",rp2.dataset.repub).select();
   if(x2.error||!x2.data||!x2.data.length){toast(x2.error?msg(x2.error):"ما قدرتش نعيد النشر");rp2.disabled=false;return}
@@ -375,6 +397,20 @@ $("adm").onclick=async function(e){
   await sb.from("reports").delete().eq("car_id",rh.dataset.rhide);toast("تم إخفاء الإعلان");loadAdmin();loadCars();return}
  var rd=e.target.closest("button[data-rdel]");
  if(rd){rd.disabled=true;await sb.from("reports").delete().eq("id",rd.dataset.rdel);loadAdmin();return}
+ var ah=e.target.closest("button[data-ah]");
+ if(ah){var why=prompt("سبب الإخفاء (يظهر للمستخدم):");if(why===null)return;ah.disabled=true;
+  var xa=await sb.from("cars").update({status:"rejected",reject_reason:why||"أخفاه الأدمن"}).eq("id",ah.dataset.ah);
+  if(xa.error){toast(msg(xa.error));ah.disabled=false;return}toast("تم الإخفاء");admAll();loadCars();return}
+ var ash=e.target.closest("button[data-as]");
+ if(ash){ash.disabled=true;var xs=await sb.from("cars").update({status:"approved"}).eq("id",ash.dataset.as);
+  if(xs.error){toast(msg(xs.error));ash.disabled=false;return}toast("تم الإظهار");loadAdmin();loadCars();return}
+ var adl=e.target.closest("button[data-ad]");
+ if(adl){if(!confirm("مسح الإعلان نهائياً مع صوره؟ ما يرجعش."))return;adl.disabled=true;
+  var gi=await sb.from("cars").select("images").eq("id",adl.dataset.ad).single();
+  var xd=await sb.from("cars").delete().eq("id",adl.dataset.ad);
+  if(xd.error){toast(msg(xd.error));adl.disabled=false;return}
+  if(gi.data&&gi.data.images&&gi.data.images.length)await sb.storage.from(BK).remove(gi.data.images);
+  toast("تم المسح");loadAdmin();loadCars();return}
  var b=e.target.closest("button[data-id]");
  if(b){var rs=null;if(b.dataset.s=="rejected"){rs=prompt("سبب الرفض (يظهر للمستخدم):");if(rs===null)return}
   b.disabled=true;var up={status:b.dataset.s};if(rs)up.reject_reason=rs;
