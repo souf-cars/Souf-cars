@@ -103,6 +103,11 @@ main{box-shadow:0 0 60px rgba(18,48,74,.12);background:var(--bg)}
 .qk input{border-radius:14px;border:1px solid var(--gold);background:#fff;font-size:17px;padding:14px 16px}
 .qk .meta{margin:8px 0 0}
 #browse details{margin-top:12px}#browse summary{cursor:pointer;font-weight:600;color:var(--mute);padding:8px 0}
+.qrow{display:flex;gap:8px;align-items:stretch}.qrow input{flex:1;min-width:0}.qrow .btn{width:auto;flex:none;margin:0;padding:0 22px;white-space:nowrap}
+.note{border-radius:16px;padding:14px 16px;margin:14px 0;font-size:15px;line-height:1.8}
+.note.ok{background:#e8f6ee;border:1px solid #2e7d5b;color:#0f3d2a}
+.note.err{background:#fdecec;border:1px solid #b3261e;color:#5c1410}
+.note .btn{margin-top:10px;width:auto;padding:8px 20px}
 </style>
 </head>
 <body>
@@ -135,7 +140,7 @@ main{box-shadow:0 0 60px rgba(18,48,74,.12);background:var(--bg)}
       <div class="seg" id="seg"><button data-t="new" aria-pressed="false">جديدة</button><button data-t="used" aria-pressed="true">مستعملة</button></div>
       <div class="qk">
         <label for="q">🔎 بحث سريع</label>
-        <input id="q" type="search" placeholder="اكتب اسم السيارة والسنة، مثال: كليو 2019" aria-label="بحث سريع" autocomplete="off">
+        <div class="qrow"><input id="q" type="search" enterkeyhint="search" placeholder="اكتب اسم السيارة والسنة، مثال: كليو 2019" aria-label="بحث سريع" autocomplete="off"><button class="btn" id="q-go" type="button">بحث</button></div>
         <div class="meta">أو اختار من الخانات اللي تحت. ما يلزمش تعمّر كلش، خانة وحدة تكفي.</div>
       </div>
       <label for="bsel">العلامة</label><select id="bsel"></select>
@@ -205,6 +210,7 @@ main{box-shadow:0 0 60px rgba(18,48,74,.12);background:var(--bg)}
   <div id="login">
     <h2 id="lg-t">تسجيل الدخول</h2>
     <p class="lead" id="lg-p">ادخل بحسابك باش تزيد سياراتك وتتابعها.</p>
+    <div id="lg-note" class="note" role="status" aria-live="polite" style="display:none"><div id="lg-note-t"></div><button class="btn alt" id="lg-note-x" type="button">فهمت</button></div>
     <div id="lg-ph" style="display:none"><label for="ph">رقم الهاتف</label><input id="ph" type="tel" inputmode="tel" placeholder="0550123456" autocomplete="tel"></div>
     <label for="em">البريد الإلكتروني</label><input id="em" type="email" placeholder="name@email.com" autocomplete="email">
     <div id="lg-em2" style="display:none"><label for="em2">أعد كتابة الإيميل</label><input id="em2" type="email" placeholder="name@email.com" autocomplete="off"></div>
@@ -256,6 +262,7 @@ function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(m){retur
 function msg(e){var m=e&&e.message?String(e.message):"";
  if(/invalid login/i.test(m))return"الإيميل أو كلمة السر غلط";
  if(/already registered|already been registered/i.test(m))return"هذا الإيميل مسجل من قبل، ادخل بيه أو اضغط «نسيت كلمة السر»";
+ if(/you can only request this after/i.test(m))return"استنى دقيقة قبل ما تعاود تطلب الرابط";
  if(/rate limit|too many/i.test(m))return"محاولات كثيرة، استنى شوية وعاود";
  if(/password should|weak password/i.test(m))return"كلمة السر ضعيفة (6 أحرف على الأقل)";
  if(/email not confirmed/i.test(m))return"أكّد الإيميل أولاً من الرابط اللي بعثناه";
@@ -267,8 +274,10 @@ function fkm(c){return c.t=="new"?fmt(c.km)+' كلم':c.km+' ألف كلم'}
 function toast(t){var e=$("toast");e.textContent=t;e.style.display="block";setTimeout(function(){e.style.display="none"},2800)}
 function go(s){if(s!="me")afterLogin=null;document.querySelectorAll(".screen").forEach(function(e){e.classList.toggle("on",e.id==s)});
  document.querySelectorAll("nav button").forEach(function(b){b.setAttribute("aria-current",b.dataset.go==s)});scrollTo(0,0)}
-var lgMode="in",afterLogin=null;
-function setMode(m){lgMode=m;var up=m=="up";
+function note(kind,html){var n=$("lg-note");n.className="note "+kind;$("lg-note-t").innerHTML=html;n.style.display="block";n.scrollIntoView({behavior:"smooth",block:"center"})}
+function hideNote(){$("lg-note").style.display="none"}
+var lgMode="in",afterLogin=null,fgT=null;
+function setMode(m){lgMode=m;var up=m=="up";hideNote();
  $("lg-t").textContent=up?"إنشاء حساب جديد":"تسجيل الدخول";
  $("lg-p").textContent=up?"اكتب رقم هاتفك وإيميلك وكلمة سر (6 أحرف على الأقل).":"ادخل بحسابك باش تزيد سياراتك وتتابعها.";
  $("in").textContent=up?"إنشاء الحساب":"دخول";
@@ -376,7 +385,7 @@ async function auth(kind){
   if(pw!=$("pw2").value){toast("كلمتا السر مختلفتان");return}
   r=await sb.auth.signUp({email:em,password:pw,options:{data:{phone:ph}}});
   if(r.error){toast(msg(r.error));return}
-  if(!r.data.session){toast("تفقد إيميلك وأكّد الحساب، وبعدها ادخل");setMode("in");return}
+  if(!r.data.session){setMode("in");note("ok","📧 بعتنالك رسالة تأكيد على إيميلك. افتحها واضغط على الرابط، وبعدها ادخل بحسابك.<br>ما لقيتهاش؟ شوف في <b>Spam</b> (الرسائل غير المرغوبة).");return}
   $("pw2").value="";$("em2").value=""}
  await refresh();var t=afterLogin;afterLogin=null;if(t)go(t)}
 var ADM_ST={approved:["منشورة","ok"],pending:["قيد المراجعة","wait"],rejected:["مخفية","bad"],sold:["تباعت","wait"]},admT=null;
@@ -427,6 +436,10 @@ $("bsel").onchange=function(){brand=this.value;mdl="الكل";fillModels();rende
 $("msel").onchange=function(){mdl=this.value;render()};
 $("csel").onchange=function(){cityF=this.value;render()};
 $("q").oninput=function(){render()};
+function goResults(){render();$("q").blur();$("rcount").scrollIntoView({behavior:"smooth",block:"start"})}
+$("q-go").onclick=goResults;
+$("q").addEventListener("keydown",function(e){if(e.key=="Enter"){e.preventDefault();goResults()}});
+$("lg-note-x").onclick=hideNote;
 $("fy1").onchange=function(){fb.y1=parseInt(this.value)||0;render()};
 $("fy2").onchange=function(){fb.y2=parseInt(this.value)||0;render()};
 (function(){var y=new Date().getFullYear()+1,a="";for(;y>=1980;y--)a+="<option>"+y+"</option>";$("fy1").innerHTML='<option value="">من</option>'+a;$("fy2").innerHTML='<option value="">إلى</option>'+a})();
@@ -434,7 +447,7 @@ var chosen=false;
 function showFind(){chosen=true;$("b-pick").style.display="none";$("b-find").style.display="block"}
 function browseOpen(fresh){if(fresh)chosen=false;go("browse");$("b-pick").style.display=chosen?"none":"block";$("b-find").style.display=chosen?"block":"none"}
 document.querySelectorAll("#b-pick .pick").forEach(function(b){b.onclick=function(){tab=b.dataset.t;$("seg").querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed",x.dataset.t==tab)});showFind();render();scrollTo(0,0)}});
-$("b-show").onclick=function(){$("list").scrollIntoView({behavior:"smooth"})};
+$("b-show").onclick=goResults;
 $("b-reset").onclick=function(){$("q").value="";brand="الكل";mdl="الكل";cityF="الكل";fb={body:"",fuel:"",pmax:0,pmin:0,kmax:0,gear:"",pap:"",y1:0,y2:0,fav:false};
  ["fy1","fy2","fpmin","fpmax","fkmax","fbody","ffuel","fgear","fpap"].forEach(function(id){$(id).value=""});$("csel").value="الكل";$("ffav").setAttribute("aria-pressed","false");fillBrands();render()};
 function chkOther(){$("f-other").style.display=($("f-brand").value=="أخرى"||$("f-model").value=="أخرى")?"block":"none"}
@@ -571,8 +584,15 @@ $("fpmin").oninput=function(){fb.pmin=parseFloat(this.value)||0;render()};
 $("fkmax").oninput=function(){fb.kmax=parseFloat(this.value)||0;render()};
 $("fpmax").oninput=function(){fb.pmax=parseFloat(this.value)||0;render()};
 $("ffav").onclick=function(){fb.fav=!fb.fav;this.setAttribute("aria-pressed",fb.fav);render()};
-$("forgot").onclick=async function(){var em=$("em").value.trim();if(!em){toast("اكتب الإيميل أولاً");return}
- var r=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.origin+location.pathname});toast(r.error?msg(r.error):"بعتنالك رابط على الإيميل. شوف حتى في Spam")};
+$("forgot").onclick=async function(){
+ var em=$("em").value.trim();
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){note("err","اكتب إيميلك في خانة «البريد الإلكتروني» أولاً، وبعدها اضغط «نسيت كلمة السر؟».");return}
+ var b=this;b.disabled=true;
+ var r=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.origin+location.pathname});
+ if(r.error){b.disabled=false;note("err","⚠️ "+esc(msg(r.error)));return}
+ note("ok","✅ بعتنالك رابط الاسترجاع على <b dir=\"ltr\">"+esc(em)+"</b><br>1) افتح الإيميل.<br>2) اضغط على الرابط اللي فيه.<br>3) اكتب كلمة سر جديدة.<br>ما لقيتش الرسالة؟ شوف في <b>Spam</b> (الرسائل غير المرغوبة)، وقد تتأخر دقيقة.");
+ var n=60;b.textContent="أعد الإرسال بعد "+n+" ثانية";clearInterval(fgT);
+ fgT=setInterval(function(){n--;if(n<=0){clearInterval(fgT);b.disabled=false;b.textContent="نسيت كلمة السر؟";return}b.textContent="أعد الإرسال بعد "+n+" ثانية"},1000)};
 $("chpw").onclick=function(){recov=true;refresh()};
 $("npc").onclick=function(){recov=false;$("np").value="";$("np2").value="";refresh()};
 $("npb").onclick=async function(){var p=$("np").value;if(p.length<6){toast("6 أحرف على الأقل");return}if(p!=$("np2").value){toast("كلمتا السر مختلفتان");return}
