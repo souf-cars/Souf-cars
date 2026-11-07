@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#12304a">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Souf Cars</title>
 <meta name="description" content="سوف كارز: سيارات جديدة ومستعملة للبيع في الوادي وبلدياتها.">
@@ -21,7 +21,7 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Cairo,Tahoma,Arial,sans-serif;font-size:16px;line-height:1.6}
+html{background:var(--bg)}html,body{margin:0;color:var(--ink);font-family:Cairo,Tahoma,Arial,sans-serif;font-size:16px;line-height:1.6}
 main{max-width:520px;margin:0 auto;padding:0 16px 96px}
 header{padding:20px 0 8px;display:flex;align-items:baseline;justify-content:space-between}
 .logo{font-size:30px;font-weight:800;letter-spacing:-.5px;margin:0}
@@ -89,9 +89,8 @@ input,select,textarea{width:100%;border:1px solid var(--line);background:var(--c
 .sc select,.sc .search{border-radius:99px;background:#fff;border:1px solid var(--line)}
 #list{margin-top:20px}
 @media(min-width:700px){
-body{background:linear-gradient(rgba(238,241,244,.9),rgba(238,241,244,.9)),url(hero.webp) center/cover fixed}
 .hero{margin:0 -16px;border-radius:0 0 28px 28px;min-height:680px;background-position:center 20%}
-main{box-shadow:0 0 60px rgba(18,48,74,.12);background:var(--bg)}
+main{box-shadow:0 0 60px rgba(18,48,74,.12);background:rgba(238,241,244,.72)!important;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 }
 .lnk{background:none;border:0;padding:0;font:inherit;font-weight:800;color:var(--ink);text-decoration:underline;cursor:pointer}
 #browse .sc{margin-top:8px}
@@ -108,6 +107,22 @@ main{box-shadow:0 0 60px rgba(18,48,74,.12);background:var(--bg)}
 .note.ok{background:#e8f6ee;border:1px solid #2e7d5b;color:#0f3d2a}
 .note.err{background:#fdecec;border:1px solid #b3261e;color:#5c1410}
 .note .btn{margin-top:10px;width:auto;padding:8px 20px}
+
+body::before{content:"";position:fixed;inset:-20px;z-index:-1;background:linear-gradient(rgba(238,241,244,.55),rgba(238,241,244,.78)),url(hero.webp) center/cover no-repeat;filter:blur(9px);transition:opacity .25s}
+body.is-home::before{opacity:0}
+main{background:transparent}
+.lead,.meta,h2{text-shadow:0 1px 8px rgba(238,241,244,.9)}
+.qk{padding:10px 12px}
+.qk label{font-size:14px;margin:0 0 6px}
+.qk label .ic{font-size:12px;display:inline-block;transform:scale(.8);margin-inline-end:2px}
+.qk input{font-size:14px;padding:10px 12px;text-overflow:ellipsis}
+.qk input::placeholder{font-size:12px;color:#7a8794;opacity:1}
+.qrow .btn{padding:0 16px;font-size:15px}
+.qk .meta{font-size:12.5px}
+.clr{display:flex;flex-wrap:wrap;gap:8px 6px;margin:2px 0 6px}
+.clr button{display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:4px 10px 4px 12px;font:inherit;font-size:13px;cursor:pointer}
+.clr button i{width:18px;height:18px;border-radius:50%;border:1px solid rgba(0,0,0,.25);flex:none;display:block}
+.clr button[aria-pressed=true]{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink) inset;font-weight:800}
 </style>
 </head>
 <body>
@@ -116,7 +131,7 @@ main{box-shadow:0 0 60px rgba(18,48,74,.12);background:var(--bg)}
 </defs></svg>
 
 <main>
-<section id="home" class="screen on">
+<section id="home" class="screen on"><script>document.body.classList.add("is-home")</script>
   <div class="hero">
     <div class="top"><span>سوف <b>كارز</b></span><button id="h-acc">حسابي</button></div>
     <h2>اعثر على سيارتك <em>في الوادي</em></h2>
@@ -139,8 +154,8 @@ main{box-shadow:0 0 60px rgba(18,48,74,.12);background:var(--bg)}
     <div class="sc" id="sc">
       <div class="seg" id="seg"><button data-t="new" aria-pressed="false">جديدة</button><button data-t="used" aria-pressed="true">مستعملة</button></div>
       <div class="qk">
-        <label for="q">🔎 بحث سريع</label>
-        <div class="qrow"><input id="q" type="search" enterkeyhint="search" placeholder="اكتب اسم السيارة والسنة، مثال: كليو 2019" aria-label="بحث سريع" autocomplete="off"><button class="btn" id="q-go" type="button">بحث</button></div>
+        <label for="q"><span class="ic">🔎</span> بحث سريع</label>
+        <div class="qrow"><input id="q" type="search" enterkeyhint="search" placeholder="اسم السيارة والسنة: كليو 2019" aria-label="بحث سريع" autocomplete="off"><button class="btn" id="q-go" type="button">بحث</button></div>
         <div class="meta">أو اختار من الخانات اللي تحت. ما يلزمش تعمّر كلش، خانة وحدة تكفي.</div>
       </div>
       <label for="bsel">العلامة</label><select id="bsel"></select>
@@ -185,7 +200,7 @@ main{box-shadow:0 0 60px rgba(18,48,74,.12);background:var(--bg)}
     <div><label for="f-phone">رقم الهاتف</label><input id="f-phone" inputmode="tel" placeholder="05 / 06 / 07 ..."></div>
   </div>
   <div class="row"><div><label for="f-gear">علبة السرعات</label><select id="f-gear"><option>يدوية</option><option>أوتوماتيكية</option></select></div><div><label for="f-fuel">الطاقة</label><select id="f-fuel"><option>بنزين</option><option>مازوت</option><option>غاز (GPL)</option><option>هجين</option><option>كهربائية</option></select></div></div>
-  <div class="row"><div><label for="f-eng">المحرك</label><input id="f-eng" placeholder="1.5 dCi"></div><div><label for="f-color">اللون</label><input id="f-color" placeholder="أبيض"></div></div>
+  <div class="row" style="grid-template-columns:1fr"><div><label for="f-eng">المحرك</label><input id="f-eng" placeholder="1.5 dCi"></div></div><label>اللون</label><input id="f-color" type="hidden"><div class="clr" id="f-clr"><button type="button" data-c="أبيض" aria-pressed="false"><i style="background:#ffffff"></i>أبيض</button><button type="button" data-c="أسود" aria-pressed="false"><i style="background:#111111"></i>أسود</button><button type="button" data-c="رمادي" aria-pressed="false"><i style="background:#808690"></i>رمادي</button><button type="button" data-c="فضي" aria-pressed="false"><i style="background:#c4c8ce"></i>فضي</button><button type="button" data-c="أزرق" aria-pressed="false"><i style="background:#1f4fa3"></i>أزرق</button><button type="button" data-c="أحمر" aria-pressed="false"><i style="background:#c0262d"></i>أحمر</button><button type="button" data-c="أخضر" aria-pressed="false"><i style="background:#2e7d4f"></i>أخضر</button><button type="button" data-c="بني" aria-pressed="false"><i style="background:#6b4423"></i>بني</button><button type="button" data-c="بيج" aria-pressed="false"><i style="background:#d9c7a3"></i>بيج</button><button type="button" data-c="ذهبي" aria-pressed="false"><i style="background:#c9a227"></i>ذهبي</button><button type="button" data-c="برتقالي" aria-pressed="false"><i style="background:#f08a1c"></i>برتقالي</button><button type="button" data-c="أصفر" aria-pressed="false"><i style="background:#f2d024"></i>أصفر</button><button type="button" data-c="بنفسجي" aria-pressed="false"><i style="background:#6a3d9a"></i>بنفسجي</button><button type="button" data-c="بورغوني" aria-pressed="false"><i style="background:#6d1f2f"></i>بورغوني</button></div>
   <label for="f-sell">نوع البائع</label><select id="f-sell"><option value="individual">فرد</option><option value="dealer">معرض / وكالة</option></select>
   <label for="f-pap">الأوراق</label><select id="f-pap"><option>بطاقة رمادية</option><option>توكيل (وكالة)</option><option>أوراق جديدة / في طور التسجيل</option></select>
   <label>التجهيزات</label>
@@ -272,7 +287,7 @@ function fp(c){return c.p+'<span>مليون</span>'+(c.neg?'<span> • قابل 
 function ago(d){if(!d)return"";var m=Math.floor((Date.now()-new Date(d))/6e4);if(m<60)return"قبل "+Math.max(m,1)+" دقيقة";var h=Math.floor(m/60);if(h<24)return"قبل "+h+" ساعة";var j=Math.floor(h/24);return j==1?"أمس":j<30?"قبل "+j+" يوم":"قبل "+Math.floor(j/30)+" شهر"}
 function fkm(c){return c.t=="new"?fmt(c.km)+' كلم':c.km+' ألف كلم'}
 function toast(t){var e=$("toast");e.textContent=t;e.style.display="block";setTimeout(function(){e.style.display="none"},2800)}
-function go(s){if(s!="me")afterLogin=null;document.querySelectorAll(".screen").forEach(function(e){e.classList.toggle("on",e.id==s)});
+function go(s){if(s!="me")afterLogin=null;document.body.classList.toggle("is-home",s=="home");document.querySelectorAll(".screen").forEach(function(e){e.classList.toggle("on",e.id==s)});
  document.querySelectorAll("nav button").forEach(function(b){b.setAttribute("aria-current",b.dataset.go==s)});scrollTo(0,0)}
 function note(kind,html){var n=$("lg-note");n.className="note "+kind;$("lg-note-t").innerHTML=html;n.style.display="block";n.scrollIntoView({behavior:"smooth",block:"center"})}
 function hideNote(){$("lg-note").style.display="none"}
@@ -455,6 +470,8 @@ $("f-brand").onchange=function(){var m=MD[this.value]||[];$("f-model").innerHTML
 $("f-model").onchange=chkOther;
 $("f-img").onchange=function(){[].slice.call(this.files).forEach(function(f){if(files.length<10)files.push(f);else toast("10 صور كحد أقصى")});this.value="";showT()};
 $("thumbs").onclick=function(e){if(e.target.tagName=="IMG"){files.splice(+e.target.dataset.i,1);showT()}};
+function setColor(v){$("f-color").value=v||"";document.querySelectorAll("#f-clr button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.c==v)})}
+document.querySelectorAll("#f-clr button").forEach(function(b){b.onclick=function(){setColor($("f-color").value==b.dataset.c?"":b.dataset.c)}});
 function closeSheet(){$("sheet").classList.remove("on");if(/^#car-/.test(location.hash))history.replaceState(null,"",location.pathname+location.search)}
 function route(){var m=/^#car-(.+)$/.exec(location.hash);
  if(!m){$("sheet").classList.remove("on");return}
@@ -568,7 +585,7 @@ $("send").onclick=async function(){
   var opts=[].slice.call(document.querySelectorAll("#add .opts input[type=checkbox]:checked")).filter(function(x){return x.id!="f-neg"}).map(function(x){return x.parentNode.textContent.trim()});
   var row={name:nm,brand:br,model:mdv,seller_type:$("f-sell").value,trim:$("f-trim").value.trim()||null,condition:nw?"new":"used",year:yr,price:pr,mileage:Math.round(nw?kmv:kmv*1000),city:$("f-city").value,phone:phv,body_type:$("f-body").value,gearbox:$("f-gear").value=="يدوية"?"manual":"automatic",fuel:$("f-fuel").value,engine:$("f-eng").value.trim()||null,color:$("f-color").value.trim()||null,papers:$("f-pap").value,negotiable:$("f-neg").checked,airbags_type:$("f-air").value,airbags_count:parseInt($("f-airn").value)||null,options:opts,images:paths,description:$("f-desc").value.trim()||null,status:"pending"};
   var r=await sb.from("cars").insert(row);if(r.error)throw r.error;saved=true;
-  files=[];showT();$("f-other").value="";toast("وصلت. سيارتك قيد المراجعة.");await refresh();go("me")
+  files=[];showT();$("f-other").value="";setColor("");toast("وصلت. سيارتك قيد المراجعة.");await refresh();go("me")
  }catch(e){if(!saved&&paths.length)sb.storage.from(BK).remove(allPaths(paths));toast(msg(e))}
  btn.disabled=false;btn.textContent="أرسل للمراجعة"};
 
