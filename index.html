@@ -219,7 +219,7 @@ main{background:transparent}
     <p class="lead" id="lg-p">ادخل بحسابك باش تزيد سياراتك وتتابعها.</p>
     <div id="lg-note" class="note" role="status" aria-live="polite" style="display:none"><div id="lg-note-t"></div><button class="btn alt" id="lg-note-x" type="button">فهمت</button></div>
     <div id="lg-ph" style="display:none"><label for="ph">رقم الهاتف</label><input id="ph" type="tel" inputmode="tel" placeholder="0550123456" autocomplete="tel"></div>
-    <label for="em" id="em-l">البريد الإلكتروني أو رقم الهاتف</label><input id="em" type="text" inputmode="email" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="name@email.com" autocomplete="username"><p class="meta" id="em-h" style="display:none;margin:6px 0 0">ليس إجباري، لكنه مهم لاسترجاع حسابك في حالة نسيان كلمة السر.</p>
+    <label for="em" id="em-l">البريد الإلكتروني أو رقم الهاتف</label><input id="em" type="text" inputmode="email" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="name@email.com" autocomplete="username">
     <label for="pw">كلمة السر</label><input id="pw" type="password">
     <button class="btn" id="in">دخول</button>
     <button class="btn grn" id="lg-up" type="button">إنشاء حساب</button>
@@ -290,8 +290,7 @@ function setMode(m){lgMode=m;var up=m=="up";hideNote();
  $("lg-up").textContent=up?"إنشاء الحساب":"إنشاء حساب";
  $("lg-sw").innerHTML=up?'عندك حساب؟ <button type="button" class="lnk" id="lg-tg">تسجيل الدخول</button>':"";
  if(up)$("lg-tg").onclick=function(){setMode("in")};
- $("em-l").textContent=up?"البريد الإلكتروني (ليس إجباري)":"البريد الإلكتروني أو رقم الهاتف";
- $("em-h").style.display=up?"block":"none";
+ $("em-l").textContent=up?"البريد الإلكتروني (ليس إجباري، لكنه مهم لاسترجاع حسابك في حالة نسيان كلمة السر)":"البريد الإلكتروني أو رقم الهاتف";
  $("em").placeholder=up?"name@email.com":"الإيميل أو رقم الهاتف";
  $("lg-terms").style.display=up?"block":"none";
  $("forgot").style.display=up?"none":"";
