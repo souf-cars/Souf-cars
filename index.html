@@ -126,6 +126,7 @@ main{background:transparent}
 .cond{display:inline-block;font-size:11px;font-weight:600;line-height:1.7;padding:0 8px;border-radius:99px;vertical-align:middle;margin-inline-start:6px;border:1px solid currentColor;white-space:nowrap}
 .cond.new{color:var(--ok)}.cond.used{color:var(--wait)}
 #f-desc{min-height:220px;resize:vertical;line-height:1.8}
+.btn.grn{background:#1f8f4e;color:#fff}
 </style>
 </head>
 <body>
@@ -218,11 +219,10 @@ main{background:transparent}
     <p class="lead" id="lg-p">ادخل بحسابك باش تزيد سياراتك وتتابعها.</p>
     <div id="lg-note" class="note" role="status" aria-live="polite" style="display:none"><div id="lg-note-t"></div><button class="btn alt" id="lg-note-x" type="button">فهمت</button></div>
     <div id="lg-ph" style="display:none"><label for="ph">رقم الهاتف</label><input id="ph" type="tel" inputmode="tel" placeholder="0550123456" autocomplete="tel"></div>
-    <label for="em">البريد الإلكتروني</label><input id="em" type="email" placeholder="name@email.com" autocomplete="email">
-    <div id="lg-em2" style="display:none"><label for="em2">أعد كتابة الإيميل</label><input id="em2" type="email" placeholder="name@email.com" autocomplete="off"></div>
+    <label for="em" id="em-l">البريد الإلكتروني أو رقم الهاتف</label><input id="em" type="text" inputmode="email" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="name@email.com" autocomplete="username"><p class="meta" id="em-h" style="display:none;margin:6px 0 0">ليس إجباري، لكنه مهم لاسترجاع حسابك في حالة نسيان كلمة السر.</p>
     <label for="pw">كلمة السر</label><input id="pw" type="password">
-    <div id="lg-pw2" style="display:none"><label for="pw2">أعد كتابة كلمة السر</label><input id="pw2" type="password" autocomplete="new-password"></div>
     <button class="btn" id="in">دخول</button>
+    <button class="btn grn" id="lg-up" type="button">إنشاء حساب</button>
     <p class="meta" id="lg-sw" style="text-align:center;margin:16px 0 0"></p>
     <p class="meta" id="lg-terms" style="margin-top:12px;display:none">بالتسجيل توافق على <a href="privacy.html">الشروط وسياسة الخصوصية</a>.</p>
     <button class="btn alt link" id="forgot">نسيت كلمة السر؟</button>
@@ -266,8 +266,8 @@ var GR=[["سيارات",S1],["علامات صينية",S2],["شاحنات وحا
 /* ---------- أدوات ---------- */
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(m){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]})}
 function msg(e){var m=e&&e.message?String(e.message):"";
- if(/invalid login/i.test(m))return"الإيميل أو كلمة السر غلط";
- if(/already registered|already been registered/i.test(m))return"هذا الإيميل مسجل من قبل، ادخل بيه أو اضغط «نسيت كلمة السر»";
+ if(/invalid login/i.test(m))return"بيانات الدخول غلط (الإيميل أو الهاتف أو كلمة السر)";
+ if(/already registered|already been registered/i.test(m))return"هذا الحساب مسجل من قبل (بنفس الإيميل أو رقم الهاتف)، ادخل بيه أو اضغط «نسيت كلمة السر»";
  if(/you can only request this after/i.test(m))return"استنى دقيقة قبل ما تعاود تطلب الرابط";
  if(/rate limit|too many/i.test(m))return"محاولات كثيرة، استنى شوية وعاود";
  if(/password should|weak password/i.test(m))return"كلمة السر ضعيفة (6 أحرف على الأقل)";
@@ -285,13 +285,17 @@ function hideNote(){$("lg-note").style.display="none"}
 var lgMode="in",afterLogin=null,fgT=null;
 function setMode(m){lgMode=m;var up=m=="up";hideNote();
  $("lg-t").textContent=up?"إنشاء حساب جديد":"تسجيل الدخول";
- $("lg-p").textContent=up?"اكتب رقم هاتفك وإيميلك وكلمة سر (6 أحرف على الأقل).":"ادخل بحسابك باش تزيد سياراتك وتتابعها.";
- $("in").textContent=up?"إنشاء الحساب":"دخول";
- $("lg-sw").innerHTML=(up?"عندك حساب؟ ":"ما عندكش حساب؟ ")+'<button type="button" class="lnk" id="lg-tg">'+(up?"تسجيل الدخول":"إنشاء حساب جديد")+'</button>';
- $("lg-tg").onclick=function(){setMode(up?"in":"up")};
+ $("lg-p").textContent=up?"اكتب رقم هاتفك وكلمة سر (6 أحرف على الأقل). الإيميل اختياري.":"ادخل بحسابك باش تزيد سياراتك وتتابعها.";
+ $("in").style.display=up?"none":"";
+ $("lg-up").textContent=up?"إنشاء الحساب":"إنشاء حساب";
+ $("lg-sw").innerHTML=up?'عندك حساب؟ <button type="button" class="lnk" id="lg-tg">تسجيل الدخول</button>':"";
+ if(up)$("lg-tg").onclick=function(){setMode("in")};
+ $("em-l").textContent=up?"البريد الإلكتروني (ليس إجباري)":"البريد الإلكتروني أو رقم الهاتف";
+ $("em-h").style.display=up?"block":"none";
+ $("em").placeholder=up?"name@email.com":"الإيميل أو رقم الهاتف";
  $("lg-terms").style.display=up?"block":"none";
  $("forgot").style.display=up?"none":"";
- ["lg-ph","lg-em2","lg-pw2"].forEach(function(id){$(id).style.display=up?"block":"none"});
+ $("lg-ph").style.display=up?"block":"none";
  $("pw").setAttribute("autocomplete",up?"new-password":"current-password")}
 function needLogin(){afterLogin="add";setMode("in");$("lg-p").textContent="ادخل بحسابك باش تزيد سيارتك.";go("me")}
 function signedUrls(paths){return paths.length?sb.storage.from(BK).createSignedUrls(paths,3600).then(function(s){var u={};(s.data||[]).forEach(function(x){if(x.signedUrl)u[x.path]=x.signedUrl});return u}):Promise.resolve({})}
@@ -377,23 +381,28 @@ async function refresh(){
  if(recov){$("login").style.display="none";$("mycars").style.display="none";$("rec").style.display="block";return}
  $("login").style.display=user?"none":"block";$("mycars").style.display=user?"block":"none";
  if(user){loadMine();loadAdmin()}else{$("adm").style.display="none"}}
+var PH_MAIL="@tel.souf-cars.app";
+function loginId(v){v=String(v).trim();if(!v)return"";if(v.indexOf("@")>-1)return v;var p=normPhone(v);return p?p+PH_MAIL:""}
 async function auth(kind){
- var em=$("em").value.trim(),pw=$("pw").value,r;
+ var pw=$("pw").value,r,em;
  if(kind=="in"){
-  if(!em||pw.length<6){toast("اكتب الإيميل وكلمة السر");return}
+  em=loginId($("em").value);
+  if(!em||pw.length<6){toast("اكتب الإيميل أو رقم الهاتف وكلمة السر");return}
   r=await sb.auth.signInWithPassword({email:em,password:pw});
   if(r.error){toast(msg(r.error));return}
  }else{
-  var ph=normPhone($("ph").value);
+  var ph=normPhone($("ph").value),em0=$("em").value.trim();
   if(!ph){toast("رقم هاتف غير صحيح (مثال: 0550123456)");return}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){toast("اكتب إيميل صحيح");return}
-  if(em.toLowerCase()!=$("em2").value.trim().toLowerCase()){toast("الإيميلان مختلفان");return}
+  if(em0&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em0)){toast("اكتب إيميل صحيح أو اتركه فارغاً");return}
   if(pw.length<6){toast("كلمة السر 6 أحرف على الأقل");return}
-  if(pw!=$("pw2").value){toast("كلمتا السر مختلفتان");return}
+  em=em0||ph+PH_MAIL;
   r=await sb.auth.signUp({email:em,password:pw,options:{data:{phone:ph}}});
   if(r.error){toast(msg(r.error));return}
-  if(!r.data.session){setMode("in");note("ok","📧 بعتنالك رسالة تأكيد على إيميلك. افتحها واضغط على الرابط، وبعدها ادخل بحسابك.<br>ما لقيتهاش؟ شوف في <b>Spam</b> (الرسائل غير المرغوبة).");return}
-  $("pw2").value="";$("em2").value=""}
+  if(!r.data.session){
+   if(!em0){setMode("up");note("err","⚠️ ما تمش التسجيل بدون إيميل. اكتب إيميلك وعاود.");return}
+   setMode("in");note("ok","📧 بعتنالك رسالة تأكيد على إيميلك. افتحها واضغط على الرابط، وبعدها ادخل بحسابك.<br>ما لقيتهاش؟ شوف في <b>Spam</b> (الرسائل غير المرغوبة).");return}
+  $("pw").value=""
+ }
  await refresh();var t=afterLogin;afterLogin=null;if(t)go(t)}
 var ADM_ST={approved:["منشورة","ok"],pending:["قيد المراجعة","wait"],rejected:["مخفية","bad"],sold:["تباعت","wait"]},admT=null;
 var ADM_HTML='<h2>كل الإعلانات</h2><input id="adm-q" placeholder="ابحث بالاسم أو رقم الهاتف" maxlength="40" aria-label="بحث"><select id="adm-st" aria-label="الحالة"><option value="">كل الحالات</option><option value="approved">منشورة</option><option value="pending">قيد المراجعة</option><option value="rejected">مخفية</option><option value="sold">تباعت</option></select><div id="adm-all"></div>';
@@ -554,7 +563,8 @@ $("h-browse").onclick=function(){browseOpen(true)};
 $("b-home").onclick=function(){go("home")};
 $("h-add").onclick=function(){if(!user){needLogin();return}go("add")};
 $("h-acc").onclick=function(){go("me")};
-$("in").onclick=function(){auth(lgMode)};
+$("in").onclick=function(){auth("in")};
+$("lg-up").onclick=function(){if(lgMode=="up")auth("up");else setMode("up")};
 $("out").onclick=async function(){await sb.auth.signOut();user=null;refresh()};
 $("send").onclick=async function(){
  if(!user){needLogin();return}
