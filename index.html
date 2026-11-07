@@ -119,10 +119,6 @@ main{background:transparent}
 .qk input::placeholder{font-size:12px;color:#7a8794;opacity:1}
 .qrow .btn{padding:0 16px;font-size:15px}
 .qk .meta{font-size:12.5px}
-.clr{display:flex;flex-wrap:wrap;gap:8px 6px;margin:2px 0 6px}
-.clr button{display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:4px 10px 4px 12px;font:inherit;font-size:13px;cursor:pointer}
-.clr button i{width:18px;height:18px;border-radius:50%;border:1px solid rgba(0,0,0,.25);flex:none;display:block}
-.clr button[aria-pressed=true]{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink) inset;font-weight:800}
 .cond{display:inline-block;font-size:11px;font-weight:600;line-height:1.7;padding:0 8px;border-radius:99px;vertical-align:middle;margin-inline-start:6px;border:1px solid currentColor;white-space:nowrap}
 .cond.new{color:var(--ok)}.cond.used{color:var(--wait)}
 #f-desc{min-height:220px;resize:vertical;line-height:1.8}
@@ -183,22 +179,20 @@ main{background:transparent}
   <label for="f-model">النوعية (الموديل) *</label><select id="f-model"></select>
   <input id="f-other" placeholder="اكتب اسم الماركة والنوعية" style="display:none;margin-top:8px" maxlength="60" aria-label="الماركة والنوعية">
   <label for="f-year">السنة</label><input id="f-year" inputmode="numeric" placeholder="2018">
-  <div class="row">
-    <div><label for="f-price">السعر (مليون)</label><input id="f-price" inputmode="decimal" placeholder="185"></div>
-    <div><label for="f-km" id="km-l">المسافة المقطوعة (ألف كلم)</label><input id="f-km" inputmode="numeric" placeholder="95"></div>
-  </div>
+  <label for="f-price">السعر (مليون)</label><input id="f-price" inputmode="decimal" placeholder="185">
+  <label for="f-ptype">نوع السعر</label><select id="f-ptype"><option value="fixed">سعر البيع ثابت</option><option value="neg">سعر البيع قابل للتفاوض</option><option value="offer_in">ساوموني به داخل السوق</option><option value="offer_out">ساوموني به خارج السوق</option></select>
+  <label for="f-km" id="km-l">المسافة المقطوعة (ألف كلم)</label><input id="f-km" inputmode="numeric" placeholder="95">
   <div class="row">
     <div><label for="f-city">البلدية</label><select id="f-city"></select></div>
     <div><label for="f-phone">رقم الهاتف</label><input id="f-phone" inputmode="tel" placeholder="05 / 06 / 07 ..."></div>
   </div>
   <div class="row"><div><label for="f-gear">علبة السرعات</label><select id="f-gear"><option>يدوية</option><option>أوتوماتيكية</option></select></div><div><label for="f-fuel">الطاقة</label><select id="f-fuel"><option>بنزين</option><option>مازوت</option><option>غاز (GPL)</option><option>هجين</option><option>كهربائية</option></select></div></div>
-  <div class="row" style="grid-template-columns:1fr"><div><label for="f-eng">المحرك</label><input id="f-eng" placeholder="1.5 dCi"></div></div><label>اللون</label><input id="f-color" type="hidden"><div class="clr" id="f-clr"><button type="button" data-c="أبيض" aria-pressed="false"><i style="background:#ffffff"></i>أبيض</button><button type="button" data-c="أسود" aria-pressed="false"><i style="background:#111111"></i>أسود</button><button type="button" data-c="رمادي" aria-pressed="false"><i style="background:#808690"></i>رمادي</button><button type="button" data-c="فضي" aria-pressed="false"><i style="background:#c4c8ce"></i>فضي</button><button type="button" data-c="أزرق" aria-pressed="false"><i style="background:#1f4fa3"></i>أزرق</button><button type="button" data-c="أحمر" aria-pressed="false"><i style="background:#c0262d"></i>أحمر</button><button type="button" data-c="أخضر" aria-pressed="false"><i style="background:#2e7d4f"></i>أخضر</button><button type="button" data-c="بني" aria-pressed="false"><i style="background:#6b4423"></i>بني</button><button type="button" data-c="بيج" aria-pressed="false"><i style="background:#d9c7a3"></i>بيج</button><button type="button" data-c="ذهبي" aria-pressed="false"><i style="background:#c9a227"></i>ذهبي</button><button type="button" data-c="برتقالي" aria-pressed="false"><i style="background:#f08a1c"></i>برتقالي</button><button type="button" data-c="أصفر" aria-pressed="false"><i style="background:#f2d024"></i>أصفر</button><button type="button" data-c="بنفسجي" aria-pressed="false"><i style="background:#6a3d9a"></i>بنفسجي</button><button type="button" data-c="بورغوني" aria-pressed="false"><i style="background:#6d1f2f"></i>بورغوني</button></div>
+  <div class="row" style="grid-template-columns:1fr"><div><label for="f-eng">المحرك</label><input id="f-eng" placeholder="1.5 dCi"></div></div><label for="f-color">اللون</label><select id="f-color"><option value="">اختر اللون</option><option>أبيض</option><option>أسود</option><option>رمادي</option><option>فضي</option><option>أزرق</option><option>أحمر</option><option>أخضر</option><option>بني</option><option>بيج</option><option>ذهبي</option><option>برتقالي</option><option>أصفر</option><option>بنفسجي</option><option>بورغوني</option><option>لون آخر</option></select>
   <label for="f-sell">نوع البائع</label><select id="f-sell"><option value="individual">فرد</option><option value="dealer">معرض / وكالة</option></select>
   <label for="f-pap">الأوراق</label><select id="f-pap"><option>بطاقة رمادية</option><option>توكيل (وكالة)</option><option>أوراق جديدة / في طور التسجيل</option></select>
   <label>التجهيزات</label>
   <div class="meta" style="margin:8px 0 4px">الأمان</div>
   <div class="opts"><label><input type="checkbox"> ABS</label><label><input type="checkbox"> ESP</label><label><input type="checkbox"> كاميرا خلفية</label><label><input type="checkbox"> كاميرا 360 درجة</label><label><input type="checkbox"> حساسات ركن أمامية</label><label><input type="checkbox"> حساسات ركن خلفية</label><label><input type="checkbox"> مراقبة ضغط العجلات (TPMS)</label><label><input type="checkbox"> فرامل يد كهربائية + Auto Hold</label><label><input type="checkbox"> مساعد الانطلاق في المنحدر (HAC)</label></div>
-  <div class="row"><div><label for="f-air">وسائد هوائية (Airbags)</label><select id="f-air"><option>بدون</option><option>أمامية فقط</option><option>أمامية + خلفية (جانبية / ستائر)</option></select></div><div><label for="f-airn">عددها</label><input id="f-airn" inputmode="numeric" placeholder="6"></div></div>
   <div class="meta" style="margin:12px 0 4px">مساعدة القيادة (ADAS)</div>
   <div class="opts"><label><input type="checkbox"> مثبّت سرعة (Régulateur)</label><label><input type="checkbox"> مثبّت سرعة تكيّفي (ACC)</label><label><input type="checkbox"> تحذير تصادم أمامي</label><label><input type="checkbox"> فرملة طوارئ آلية (AEB)</label><label><input type="checkbox"> مساعد البقاء في المسار</label><label><input type="checkbox"> مراقبة النقطة العمياء</label><label><input type="checkbox"> تنبيه حركة المرور الخلفية</label><label><input type="checkbox"> ركن آلي</label></div>
   <div class="meta" style="margin:12px 0 4px">الراحة</div>
@@ -207,7 +201,6 @@ main{background:transparent}
   <div class="opts"><label><input type="checkbox"> شاشة لمس</label><label><input type="checkbox"> GPS</label><label><input type="checkbox"> Apple CarPlay</label><label><input type="checkbox"> Android Auto</label><label><input type="checkbox"> عدّاد رقمي (Digital)</label><label><input type="checkbox"> بلوتوث</label><label><input type="checkbox"> USB</label><label><input type="checkbox"> نظام صوت متطور (JBL / Bose...)</label><label><input type="checkbox"> إضاءة داخلية محيطية</label></div>
   <div class="meta" style="margin:12px 0 4px">الخارج</div>
   <div class="opts"><label><input type="checkbox"> جنط ألياج (Jantes alliage)</label><label><input type="checkbox"> جنط ألمنيوم</label><label><input type="checkbox"> مصابيح LED</label><label><input type="checkbox"> مصابيح ضباب</label><label><input type="checkbox"> مصابيح أوتوماتيكية</label><label><input type="checkbox"> مساحات أوتوماتيكية</label></div>
-  <div class="opts" style="margin-top:12px"><label><input type="checkbox" id="f-neg"> السعر قابل للتفاوض</label></div>
   <label for="f-desc">الوصف</label><textarea id="f-desc" rows="9" placeholder="صف سيارتك: الحالة العامة، الصيانة، الأضرار إن وجدت، سبب البيع، أي معلومة تهم المشتري..."></textarea>
   <div class="note">بعد الإرسال، سيارتك تدخل «قيد المراجعة».</div>
   <button class="btn" id="send">أرسل للمراجعة</button>
@@ -222,10 +215,11 @@ main{background:transparent}
     <label for="em" id="em-l">البريد الإلكتروني أو رقم الهاتف</label><input id="em" type="text" inputmode="email" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="name@email.com" autocomplete="username">
     <label for="pw">كلمة السر</label><input id="pw" type="password">
     <button class="btn" id="in">دخول</button>
-    <button class="btn grn" id="lg-up" type="button">إنشاء حساب</button>
+    <button class="btn alt link" id="forgot">نسيت كلمة السر؟</button>
+    <p class="meta" id="lg-nohave" style="text-align:center;margin:16px 0 0">إذا معندكش حساب يمكنك إنشاء حساب من هنا 👇</p>
+    <button class="btn grn" id="lg-up" type="button" style="margin-top:8px">إنشاء حساب جديد</button>
     <p class="meta" id="lg-sw" style="text-align:center;margin:16px 0 0"></p>
     <p class="meta" id="lg-terms" style="margin-top:12px;display:none">بالتسجيل توافق على <a href="privacy.html">الشروط وسياسة الخصوصية</a>.</p>
-    <button class="btn alt link" id="forgot">نسيت كلمة السر؟</button>
   </div>
   <div id="rec" style="display:none"><h2>كلمة سر جديدة</h2><label for="np">كلمة السر الجديدة</label><input id="np" type="password" autocomplete="new-password"><label for="np2">أعد كتابة كلمة السر</label><input id="np2" type="password" autocomplete="new-password"><button class="btn" id="npb">حفظ</button><button class="btn alt link" id="npc" type="button">إلغاء</button></div>
   <div id="mycars" style="display:none">
@@ -274,7 +268,11 @@ function msg(e){var m=e&&e.message?String(e.message):"";
  if(/email not confirmed/i.test(m))return"أكّد الإيميل أولاً من الرابط اللي بعثناه";
  return m||"حدث خطأ"}
 function fmt(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g," ")}
-function fp(c){return c.p+'<span>مليون</span>'+(c.neg?'<span> • قابل للتفاوض</span>':'')}
+var PTS={fixed:"سعر ثابت",neg:"قابل للتفاوض",offer_in:"ساوموني به داخل السوق",offer_out:"ساوموني به خارج السوق"};
+var PTO={fixed:"سعر البيع ثابت",neg:"سعر البيع قابل للتفاوض",offer_in:"ساوموني به داخل السوق",offer_out:"ساوموني به خارج السوق"};
+function ptSel(v){return Object.keys(PTO).map(function(k){return '<option value="'+k+'"'+(k==v?" selected":"")+'>'+PTO[k]+'</option>'}).join("")}
+function ptKey(c){return c.pt||(c.neg?"neg":"")}
+function fp(c){var k=ptKey(c);return c.p+'<span>مليون</span>'+(k&&PTS[k]?'<span> • '+PTS[k]+'</span>':'')}
 function ago(d){if(!d)return"";var m=Math.floor((Date.now()-new Date(d))/6e4);if(m<60)return"قبل "+Math.max(m,1)+" دقيقة";var h=Math.floor(m/60);if(h<24)return"قبل "+h+" ساعة";var j=Math.floor(h/24);return j==1?"أمس":j<30?"قبل "+j+" يوم":"قبل "+Math.floor(j/30)+" شهر"}
 function fkm(c){return c.t=="new"?fmt(c.km)+' كلم':c.km+' ألف كلم'}
 function toast(t){var e=$("toast");e.textContent=t;e.style.display="block";setTimeout(function(){e.style.display="none"},2800)}
@@ -287,7 +285,8 @@ function setMode(m){lgMode=m;var up=m=="up";hideNote();
  $("lg-t").textContent=up?"إنشاء حساب جديد":"تسجيل الدخول";
  $("lg-p").textContent=up?"اكتب رقم هاتفك وكلمة سر (6 أحرف على الأقل). الإيميل اختياري.":"ادخل بحسابك باش تزيد سياراتك وتتابعها.";
  $("in").style.display=up?"none":"";
- $("lg-up").textContent=up?"إنشاء الحساب":"إنشاء حساب";
+ $("lg-up").textContent=up?"إنشاء الحساب":"إنشاء حساب جديد";
+ $("lg-nohave").style.display=up?"none":"";
  $("lg-sw").innerHTML=up?'عندك حساب؟ <button type="button" class="lnk" id="lg-tg">تسجيل الدخول</button>':"";
  if(up)$("lg-tg").onclick=function(){setMode("in")};
  $("em-l").textContent=up?"البريد الإلكتروني (ليس إجباري، لكنه مهم لاسترجاع حسابك في حالة نسيان كلمة السر)":"البريد الإلكتروني أو رقم الهاتف";
@@ -368,12 +367,12 @@ async function loadCars(){
   toast("تعذر جلب السيارات");$("list").innerHTML='<p class="lead">تعذر جلب السيارات. تأكد من الأنترنت وعاود.</p>';return}
  var rows=r.data||[],urls=await firstUrls(rows);
  cars=rows.map(function(x){var nw=x.condition=="new",k=x.mileage||0;
-  return{n:x.name,b:x.brand,m:x.model,v:x.trim,y:x.year,p:x.price,km:nw?k:Math.round(k/1000),c:x.city,d:x.description||"",t:x.condition,g:GM[x.gearbox]||"",f:x.fuel,e:x.engine,k:x.color,pp:x.papers,neg:x.negotiable,o:x.options||[],ph:x.phone,img:urls.t[x.images&&x.images[0]],imgF:urls.f[x.images&&x.images[0]],id:x.id,bt:x.body_type,ab:x.airbags_type,abn:x.airbags_count,im:x.images||[],dt:x.created_at,st:x.seller_type}});
+  return{n:x.name,b:x.brand,m:x.model,v:x.trim,y:x.year,p:x.price,km:nw?k:Math.round(k/1000),c:x.city,d:x.description||"",t:x.condition,g:GM[x.gearbox]||"",f:x.fuel,e:x.engine,k:x.color,pp:x.papers,neg:x.negotiable,pt:x.price_type,o:x.options||[],ph:x.phone,img:urls.t[x.images&&x.images[0]],imgF:urls.f[x.images&&x.images[0]],id:x.id,bt:x.body_type,ab:x.airbags_type,abn:x.airbags_count,im:x.images||[],dt:x.created_at,st:x.seller_type}});
  try{localStorage.setItem("cars_cache",JSON.stringify(cars.map(function(c){var o={};for(var k in c)if(k!="img")o[k]=c[k];return o})))}catch(e){}
  fillBrands();render();if(location.hash.indexOf("#car-")==0)route()}
 async function loadMine(){
  var r=await sb.from("cars").select("*").eq("owner_id",user.id).order("created_at",{ascending:false});
- mine=(r.data||[]).map(function(x){return{id:x.id,n:x.name,im:x.images||[],s:x.status=="approved"?"ok":x.status=="rejected"?"bad":x.status=="sold"?"sold":"wait",why:x.reject_reason,p:x.price,ph:x.phone,d:x.description||"",neg:x.negotiable,y:x.year,exp:!!(x.expires_at&&new Date(x.expires_at)<new Date())}});mylist()}
+ mine=(r.data||[]).map(function(x){return{id:x.id,n:x.name,im:x.images||[],s:x.status=="approved"?"ok":x.status=="rejected"?"bad":x.status=="sold"?"sold":"wait",why:x.reject_reason,p:x.price,ph:x.phone,d:x.description||"",neg:x.negotiable,pt:x.price_type,y:x.year,exp:!!(x.expires_at&&new Date(x.expires_at)<new Date())}});mylist()}
 async function refresh(){
  var s=await sb.auth.getSession();user=s.data.session?s.data.session.user:null;
   if(user&&user.user_metadata&&user.user_metadata.phone&&!$("f-phone").value)$("f-phone").value=user.user_metadata.phone;
@@ -469,8 +468,7 @@ $("f-brand").onchange=function(){var m=MD[this.value]||[];$("f-model").innerHTML
 $("f-model").onchange=chkOther;
 $("f-img").onchange=function(){[].slice.call(this.files).forEach(function(f){if(files.length<10)files.push(f);else toast("10 صور كحد أقصى")});this.value="";showT()};
 $("thumbs").onclick=function(e){if(e.target.tagName=="IMG"){files.splice(+e.target.dataset.i,1);showT()}};
-function setColor(v){$("f-color").value=v||"";document.querySelectorAll("#f-clr button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.c==v)})}
-document.querySelectorAll("#f-clr button").forEach(function(b){b.onclick=function(){setColor($("f-color").value==b.dataset.c?"":b.dataset.c)}});
+function setColor(v){$("f-color").value=v||""}
 function closeSheet(){$("sheet").classList.remove("on");if(/^#car-/.test(location.hash))history.replaceState(null,"",location.pathname+location.search)}
 function route(){var m=/^#car-(.+)$/.exec(location.hash);
  if(!m){$("sheet").classList.remove("on");return}
@@ -507,12 +505,12 @@ $("mylist").onclick=async function(e){
  var be=e.target.closest("button[data-edit]");
  if(be){var m=mine.filter(function(x){return x.id==be.dataset.edit})[0];if(!m)return;
   $("det").dataset.id="";
-  $("det").innerHTML='<h2>تعديل الإعلان</h2><p class="meta">'+esc(m.n)+'</p><label for="e-price">السعر (مليون)</label><input id="e-price" inputmode="decimal" value="'+esc(m.p)+'"><label for="e-phone">رقم الهاتف</label><input id="e-phone" inputmode="tel" value="'+esc(m.ph)+'"><label for="e-year">السنة</label><input id="e-year" inputmode="numeric" value="'+esc(m.y)+'"><label for="e-desc">وصف</label><textarea id="e-desc" rows="3">'+esc(m.d)+'</textarea><div class="opts" style="margin-top:12px"><label><input type="checkbox" id="e-neg"'+(m.neg?" checked":"")+'> السعر قابل للتفاوض</label></div><button class="btn" id="e-save">حفظ</button><button class="btn alt" id="e-x">إلغاء</button>';
+  $("det").innerHTML='<h2>تعديل الإعلان</h2><p class="meta">'+esc(m.n)+'</p><label for="e-price">السعر (مليون)</label><input id="e-price" inputmode="decimal" value="'+esc(m.p)+'"><label for="e-phone">رقم الهاتف</label><input id="e-phone" inputmode="tel" value="'+esc(m.ph)+'"><label for="e-year">السنة</label><input id="e-year" inputmode="numeric" value="'+esc(m.y)+'"><label for="e-desc">وصف</label><textarea id="e-desc" rows="3">'+esc(m.d)+'</textarea><label for="e-pt">نوع السعر</label><select id="e-pt">'+ptSel(ptKey(m)||"fixed")+'</select><button class="btn" id="e-save">حفظ</button><button class="btn alt" id="e-x">إلغاء</button>';
   $("sheet").classList.add("on");$("e-x").onclick=closeSheet;
   $("e-save").onclick=async function(){var pr=parseFloat($("e-price").value),ph=normPhone($("e-phone").value),d=$("e-desc").value.trim(),yr=parseInt($("e-year").value);
    if(!pr){toast("اكتب السعر");return}if(!ph){toast("رقم هاتف غير صحيح");return}if(!yr||yr<1980||yr>new Date().getFullYear()+1){toast("السنة غير صحيحة");return}
-   var up={price:pr,phone:ph,description:d||null,negotiable:$("e-neg").checked,year:yr};if(((ph!=m.ph||d!=m.d||yr!=m.y)&&m.s=="ok")||m.s=="bad")up.status="pending";
-   this.disabled=true;var r=await sb.from("cars").update(up).eq("id",m.id).select();
+   var up={price:pr,phone:ph,description:d||null,negotiable:$("e-pt").value!="fixed",price_type:$("e-pt").value,year:yr};if(((ph!=m.ph||d!=m.d||yr!=m.y)&&m.s=="ok")||m.s=="bad")up.status="pending";
+   this.disabled=true;var r=await sb.from("cars").update(up).eq("id",m.id).select();if(r.error&&/price_type/i.test(r.error.message||"")){delete up.price_type;r=await sb.from("cars").update(up).eq("id",m.id).select()}
    if(r.error||!r.data||!r.data.length){toast(r.error?msg(r.error):"ما قدرتش نحفظ التعديل");this.disabled=false;return}
    closeSheet();toast(up.status?"تم الحفظ. الإعلان رجع للمراجعة":"تم الحفظ");loadMine();loadCars();loadAdmin()};
   return}
@@ -583,8 +581,8 @@ $("send").onclick=async function(){
   for(var i=0;i<files.length;i++){var f=await shrink(files[i]),isj=f!==files[i],p=user.id+"/"+Date.now()+"_"+i+"."+(isj?"jpg":(files[i].name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg");
    var u=await sb.storage.from(BK).upload(p,f,{contentType:isj?"image/jpeg":files[i].type});if(u.error)throw u.error;paths.push(p);var tb=await mkThumb(files[i]);if(tb)await sb.storage.from(BK).upload(thumbPath(p),tb,{contentType:"image/jpeg"})}
   var opts=[].slice.call(document.querySelectorAll("#add .opts input[type=checkbox]:checked")).filter(function(x){return x.id!="f-neg"}).map(function(x){return x.parentNode.textContent.trim()});
-  var row={name:nm,brand:br,model:mdv,seller_type:$("f-sell").value,condition:nw?"new":"used",year:yr,price:pr,mileage:Math.round(nw?kmv:kmv*1000),city:$("f-city").value,phone:phv,gearbox:$("f-gear").value=="يدوية"?"manual":"automatic",fuel:$("f-fuel").value,engine:$("f-eng").value.trim()||null,color:$("f-color").value.trim()||null,papers:$("f-pap").value,negotiable:$("f-neg").checked,airbags_type:$("f-air").value,airbags_count:parseInt($("f-airn").value)||null,options:opts,images:paths,description:$("f-desc").value.trim()||null,status:"pending"};
-  var r=await sb.from("cars").insert(row);if(r.error)throw r.error;saved=true;
+  var row={name:nm,brand:br,model:mdv,seller_type:$("f-sell").value,condition:nw?"new":"used",year:yr,price:pr,mileage:Math.round(nw?kmv:kmv*1000),city:$("f-city").value,phone:phv,gearbox:$("f-gear").value=="يدوية"?"manual":"automatic",fuel:$("f-fuel").value,engine:$("f-eng").value.trim()||null,color:$("f-color").value.trim()||null,papers:$("f-pap").value,negotiable:$("f-ptype").value!="fixed",price_type:$("f-ptype").value,options:opts,images:paths,description:$("f-desc").value.trim()||null,status:"pending"};
+  var r=await sb.from("cars").insert(row);if(r.error&&/price_type/i.test(r.error.message||"")){delete row.price_type;r=await sb.from("cars").insert(row)}if(r.error)throw r.error;saved=true;
   files=[];showT();$("f-other").value="";setColor("");toast("وصلت. سيارتك قيد المراجعة.");await refresh();go("me")
  }catch(e){if(!saved&&paths.length)sb.storage.from(BK).remove(allPaths(paths));toast(msg(e))}
  btn.disabled=false;btn.textContent="أرسل للمراجعة"};
